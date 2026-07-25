@@ -3,7 +3,6 @@
 公開ナレッジベース。https://snowyuki31.github.io/
 
 学んだことを、後から番地を指して引用できる形に書き直して置く場所。
-圏論はその最初のトピックであって、この場所が圏論のためのものではない。
 
 ## この repo の位置づけ
 
@@ -15,16 +14,38 @@
 
 同じ内容を参照面と発信面の両方に置かない。発信面から参照面へリンクする（逆は張らない）。
 
-## 書き方
+## 構造（Obsidian と同じ思想）
 
-`src/content/docs/<topic>/*.mdx` に書く。frontmatter の `section` が採番の章番号になる。
+- **ノートはすべて atomic**（1 ノート 1 概念）。`src/content/docs/notes/*.mdx`
+- ノート間の参照は **`[[タイトル]]`**（wikilink）。build 時に frontmatter の `title` で解決される
+- **Map of Contents**（`src/content/docs/moc/*.mdx`）が読む順序を持つ上位 index。
+  1 つのノートが複数の MoC に属してよい
+- 各ページの末尾に **backlinks**（このノートへリンクしているノート）が自動で出る。
+  MoC からの被リンクは「このノートが属する MoC」として別枠で出る
+
+### wikilink
+
+```
+[[圏]]              → タイトル「圏」のノートへのリンク
+[[圏|別の表示名]]    → 表示名を変える
+[[圏#見出し]]        → anchor 付き
+```
+
+解決できない wikilink は production build を落とす（壊れたリンクを公開しない）。
+`npm run dev` 中は破線表示になり、書き続けられる。
+
+## 見た目
+
+白黒のみ・単一テーマ（切り替えなし）・最小限。
+フォントは https://nineties.github.io/topos-theory/ と同じく Roboto + sans-serif
+（和文はシステムのゴシック体）。数式は KaTeX。
+
+## 書き方
 
 ```mdx
 ---
 title: 圏
-section: 2
-sidebar:
-  order: 2
+description: 圏の定義。
 ---
 
 import { Definition, Proposition, Proof } from '@components/env';
@@ -32,26 +53,11 @@ import { Definition, Proposition, Proof } from '@components/env';
 <Definition title="圏" id="def-category">
 本文。数式は $a \circ f$ や $$...$$ で書く（KaTeX）。
 </Definition>
-
-<Proposition title="恒等射の一意性" id="prop-identity-unique">
-任意の対象 $a$ に対して、恒等射 $1_a$ は一意に定まる。
-</Proposition>
-
-<Proof>
-証明。既定では畳まれる。
-</Proof>
 ```
 
-環境は `Definition` / `Proposition` / `Theorem` / `Lemma` / `Corollary` / `Example` / `Proof` / `Ref`。
-
-### 採番
-
-番号は CSS counter で振る。**種別をまたいだ 1 本の通し番号**（定義2.1 → 命題2.2 → 定理2.3）で、
-間に足しても後ろが自動でずれる。前半の `2.` は frontmatter の `section`。
-
-番号は build 時には確定しないので、**参照側から番号を刷れない**。他の主張を指すときは
-番号ではなく `id` へのリンクで指す（`<Ref href="/category-theory/basics/#prop-identity-unique">恒等射の一意性</Ref>`）。
-番号を刷りたくなったら、採番を build 時計算に移す必要がある。
+環境は `Definition` / `Proposition` / `Theorem` / `Lemma` / `Corollary` / `Example` / `Proof`。
+ラベルは「定義（圏）」のように種別＋タイトルで出る。atomic ノートに通し番号は振らない
+（順序・文脈は MoC と wikilink が持つ）。
 
 ### 図（TikZ）
 
@@ -80,7 +86,7 @@ a \arrow[r, "f"] & b
 ```sh
 npm install
 npm run dev      # http://localhost:4321
-npm run build    # dist/ へ。TikZ の実コンパイルを含む
+npm run build    # dist/ へ。TikZ の実コンパイル・wikilink 検証を含む
 npm run preview
 ```
 

@@ -5,17 +5,21 @@ import starlight from '@astrojs/starlight';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import { remarkTikz } from './plugins/remark-tikz.mjs';
+import { remarkWikilink } from './plugins/remark-wikilink.mjs';
 
+// 和文はシステムのゴシック体に任せ、欧文だけ Roboto を当てる
+// （参照: nineties.github.io/topos-theory と同じ構成）
 const FONTS =
-  'https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@400;600;700&family=Zen+Kaku+Gothic+New:wght@500;700&display=swap';
+  'https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Roboto+Mono&display=swap';
 
 export default defineConfig({
   site: 'https://snowyuki31.github.io',
 
   markdown: {
     processor: unified({
+      // remarkWikilink は [[タイトル]] をノートへのリンクに、
       // remarkTikz は ```tikz を build 時に SVG へコンパイルする（client JS ゼロ）
-      remarkPlugins: [remarkMath, remarkTikz],
+      remarkPlugins: [remarkWikilink, remarkMath, remarkTikz],
       rehypePlugins: [[rehypeKatex, { strict: false, throwOnError: false }]],
     }),
   },
@@ -41,6 +45,13 @@ export default defineConfig({
         },
         { tag: 'link', attrs: { rel: 'stylesheet', href: FONTS } },
       ],
+      components: {
+        // トンマナは白黒 1 種のみ。テーマ切り替えを廃止する
+        ThemeProvider: './src/components/overrides/ThemeProvider.astro',
+        ThemeSelect: './src/components/overrides/ThemeSelect.astro',
+        // ノート末尾に backlinks（linked mentions）を出す
+        Footer: './src/components/overrides/Footer.astro',
+      },
       social: [
         { icon: 'github', label: 'GitHub', href: 'https://github.com/snowyuki31' },
       ],
@@ -49,7 +60,8 @@ export default defineConfig({
       },
       lastUpdated: true,
       sidebar: [
-        { label: '圏論', items: [{ autogenerate: { directory: 'category-theory' } }] },
+        { label: 'Map of Contents', items: [{ autogenerate: { directory: 'moc' } }] },
+        { label: 'Notes', items: [{ autogenerate: { directory: 'notes' } }] },
       ],
     }),
   ],

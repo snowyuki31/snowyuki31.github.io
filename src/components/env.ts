@@ -9,4 +9,3 @@ export { default as Lemma } from './Lemma.astro';
 export { default as Corollary } from './Corollary.astro';
 export { default as Example } from './Example.astro';
 export { default as Proof } from './Proof.astro';
-export { default as Ref } from './Ref.astro';

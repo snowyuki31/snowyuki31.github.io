@@ -1,0 +1,9 @@
+---
+// Footer override — 本文の末尾に backlinks を差し込む（Obsidian でノート末尾に
+// linked mentions が出るのと同じ位置づけ）。その下に既定の footer。
+import Default from '@astrojs/starlight/components/Footer.astro';
+import Backlinks from '../Backlinks.astro';
+---
+
+<Backlinks />
+<Default><slot /></Default>

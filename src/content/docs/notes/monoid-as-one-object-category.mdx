@@ -1,0 +1,25 @@
+---
+title: モノイドは対象1つの圏
+description: 対象が 1 つの圏はモノイドと同じもの。
+---
+
+import { Example } from '@components/env';
+
+<Example title="モノイドは対象が1つの圏" id="ex-monoid">
+対象を $\ast$ ただ 1 つとし、$\mathcal{C}(\ast, \ast)$ をモノイド $M$ の元全体とする。
+射の合成を $M$ の積、恒等射を単位元とすれば、結合律と単位律はそのまま [[圏]] の公理になる。
+
+つまり対象が 1 つの圏はモノイドと同じものをいう。
+</Example>
+
+```tikz
+\begin{document}
+\begin{tikzpicture}
+\node[draw, circle, minimum size=12mm] (M) at (0,0) {$\ast$};
+\draw[->,loop above] (M) to node[above] {$1_{\ast}$} (M);
+\draw[->,loop left] (M) to node[left] {$m$} (M);
+\draw[->,loop right] (M) to node[right] {$m'$} (M);
+\draw[->,loop below] (M) to node[below] {$\ldots$} (M);
+\end{tikzpicture}
+\end{document}
+```

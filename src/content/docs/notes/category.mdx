@@ -1,0 +1,40 @@
+---
+title: 圏
+description: 圏の定義。対象・射・合成・恒等射。
+---
+
+import { Definition } from '@components/env';
+
+圏は、対象と射、そして射の合成だけを持つ構造をいう。
+対象の中身には触れず、射がどう合成されるかだけを見る。
+
+<Definition title="圏" id="def-category">
+**圏** $\mathcal{C}$ とは、次のデータの組をいう。
+
+- 対象の集まり $\mathrm{Ob}(\mathcal{C})$
+- 各対象 $a, b \in \mathrm{Ob}(\mathcal{C})$ に対する射の集まり $\mathcal{C}(a, b)$
+- 射の合成 $\circ \colon \mathcal{C}(b, c) \times \mathcal{C}(a, b) \to \mathcal{C}(a, c)$
+- 各対象 $a$ に対する恒等射 $1_a \in \mathcal{C}(a, a)$
+
+ただし、任意の $f \in \mathcal{C}(a, b)$, $g \in \mathcal{C}(b, c)$, $h \in \mathcal{C}(c, d)$ について次を満たす。
+
+$$
+(h \circ g) \circ f = h \circ (g \circ f), \qquad 1_b \circ f = f = f \circ 1_a
+$$
+</Definition>
+
+$f \colon a \to b$ と $g \colon b \to c$ の合成 $g \circ f \colon a \to c$ は、次の三角形が可換であることをいう。
+
+```tikz
+\usepackage{tikz-cd}
+\begin{document}
+\begin{tikzcd}[column sep=huge, row sep=large]
+a \arrow[r, "f"] \arrow[dr, "g \circ f"'] & b \arrow[d, "g"] \\
+& c
+\end{tikzcd}
+\end{document}
+```
+
+定義では各対象に恒等射が「ある」ことしか要求していないが、実は [[恒等射の一意性]] により対象ごとに一意に決まる。
+
+対象が 1 つしかない圏の例として [[モノイドは対象1つの圏]] がある。

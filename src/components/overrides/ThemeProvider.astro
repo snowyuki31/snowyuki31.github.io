@@ -1,0 +1,8 @@
+---
+// トンマナは白黒 1 種のみ（切り替えなし）。既定の ThemeProvider（OS 設定や
+// localStorage からテーマを決める script）を置き換え、常に light に固定する。
+---
+
+<script is:inline>
+  document.documentElement.dataset.theme = 'light';
+</script>
