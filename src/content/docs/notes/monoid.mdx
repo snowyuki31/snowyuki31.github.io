@@ -30,7 +30,8 @@ $\cdot \colon M \times M \to M$、および単位元 $1_M \in M$
 （任意の $m \in M$ について $1_M \cdot m = m = m \cdot 1_M$）の組をいう。
 </Definition>
 
-例: 自然数と加法 $(\mathbb{N}, +, 0)$、文字列と連接 $(\Sigma^{*}, {+\!\!+}, \varepsilon)$。
+例: 自然数と加法 $(\mathbb{N}, +, 0)$、文字列と連接 $(\Sigma^{*}, {+\!\!+}, \varepsilon)$、
+最大公約数 $(\mathbb{N}, \gcd, 0)$。
 
 ## 例: 文字列と連接
 
@@ -57,3 +58,16 @@ $\mathtt{abc} = \mathtt{ab} \mathbin{+\!\!+} \mathtt{c}$ になる。
 恒等射は空文字列 $\varepsilon$ で、$\mathtt{ab} \mathbin{+\!\!+} \varepsilon = \mathtt{ab}$ が
 単位律にあたる。連接の結合律 $(\mathtt{a} \mathbin{+\!\!+} \mathtt{b}) \mathbin{+\!\!+} \mathtt{c} = \mathtt{a} \mathbin{+\!\!+} (\mathtt{b} \mathbin{+\!\!+} \mathtt{c})$ は、
 圏の合成の結合律そのものである。
+
+## 例: 最大公約数
+
+<Example title="最大公約数" id="ex-gcd">
+$(\mathbb{N}, \gcd, 0)$ はモノイドになる。**単位元は $0$** である。
+$0$ はすべての数の倍数なので、約数としては最強であり、$\gcd(n, 0) = n$ が成り立つ。
+
+積が「継ぎ足す」操作とは限らない例で、$\gcd(n, n) = n$（冪等）のように
+同じ射を 2 回合成しても変わらない圏になっている。
+</Example>
+
+整除関係 $m \mid n$ を順序と見ると、$\gcd$ は 2 数の最大下界（meet）であり、
+単位元 $0$ はこの順序の最大元にあたる。
