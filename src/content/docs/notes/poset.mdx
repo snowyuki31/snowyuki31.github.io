@@ -11,42 +11,35 @@ import { Definition, Example } from '@components/env';
 </Definition>
 
 [[モノイド]] が「対象が 1 つ、射がたくさん」の圏だったのに対して、半順序集合はその対極で、
-「対象がたくさん、射は高々 1 本」の圏である。
-例として、$10$ の約数 $1, 2, 5, 10$ を対象とし、割り切るときにちょうど 1 本の射を引くと、
-次の圏になる:
+「対象がたくさん、射は高々 1 本」の圏である。抽象的に描くと次のようになる。
+対象の間に射は 1 本あるか、まったくないかのどちらかで（$b$ と $d$ のように、どちら向きにも
+射がない対があってよい）、平行な射が存在しないため、結合律・単位律は自動的に成り立つ。
 
 ```tikz
 \usepackage{tikz}
-\usetikzlibrary{arrows.meta}
 \begin{document}
 \begin{tikzpicture}[
   every node/.style = {font=\small},
-  obj/.style   = {draw, circle, minimum size=9mm, inner sep=0pt},
-  hom/.style   = {->, shorten >=2pt, shorten <=2pt},
-  idloop/.style = {->, loop, min distance=10mm, looseness=8},
+  obj/.style = {draw, circle, minimum size=8mm, inner sep=0pt},
+  hom/.style = {->, shorten >=2pt, shorten <=2pt},
+  idloop/.style = {->, loop, min distance=8mm, looseness=8},
 ]
+\node[obj] (a) at (0,0) {$a$};
+\node[obj] (b) at (-2.2,2.2) {$b$};
+\node[obj] (d) at (2.2,2.2) {$d$};
+\node[obj] (c) at (0,4.4) {$c$};
 
-% ===== 対象 =====
-\node[obj] (o1)  at (0,0)   {$1$};
-\node[obj] (o2)  at (-2,2)  {$2$};
-\node[obj] (o5)  at (2,2)   {$5$};
-\node[obj] (o10) at (0,4)   {$10$};
+\draw[hom] (a) -- node[below left] {$f$} (b);
+\draw[hom] (b) -- node[above left] {$g$} (c);
+\draw[hom] (a) to[bend left=35] node[right] {$g \circ f$} (c);
+\draw[hom] (a) -- node[below right] {$h$} (d);
 
-% ===== 恒等射（自己ループ） =====
-\draw[idloop] (o1)  edge[in=210,out=150] node[left]  {$\mathrm{id}_1$}  (o1);
-\draw[idloop] (o2)  edge[in=150,out=90]  node[above] {$\mathrm{id}_2$}  (o2);
-\draw[idloop] (o5)  edge[in=90,out=30]   node[above] {$\mathrm{id}_5$}  (o5);
-\draw[idloop] (o10) edge[in=30,out=-30]  node[right] {$\mathrm{id}_{10}$} (o10);
+\draw[idloop] (a) edge[in=290,out=250] node[below] {$\mathrm{id}_a$} (a);
+\draw[idloop] (b) edge[in=160,out=200] node[left] {$\mathrm{id}_b$} (b);
+\draw[idloop] (d) edge[in=20,out=-20] node[right] {$\mathrm{id}_d$} (d);
+\draw[idloop] (c) edge[in=70,out=110] node[above] {$\mathrm{id}_c$} (c);
 
-% ===== 被覆関係の射 =====
-\draw[hom] (o1)  -- (o2);
-\draw[hom] (o1)  -- (o5);
-\draw[hom] (o2)  -- (o10);
-\draw[hom] (o5)  -- (o10);
-
-% ===== 推移的な射（1 -> 10）も省略せず明示 =====
-\draw[hom, bend right=35] (o1) to (o10);
-
+\node[gray, align=center] at (1.9,3.6) {\scriptsize no arrows here\\[-2pt]\scriptsize (incomparable)};
 \end{tikzpicture}
 \end{document}
 ```
@@ -62,51 +55,106 @@ import { Definition, Example } from '@components/env';
 - 推移律: $a \le b$ かつ $b \le c$ ならば $a \le c$
 </Definition>
 
-反射律が恒等射、推移律が合成、反対称律が「同型な対象の同一視」に対応している。
-全順序と違って、どちらの向きにも射がない（比較できない）対があってよい。
+反射律が恒等射、推移律が合成に対応する。反対称律だけは圏の構造に直接の相方がなく、
+「同型な対象の同一視」にあたる——やせた圏そのものに対応するのは、反対称律を課さない
+**前順序集合**（preorder）である。
+また全順序と違って、どちらの向きにも射がない（比較できない）対があってよい。
 
-例: 部分集合の包含 $(\mathcal{P}(X), \subseteq)$、自然数の整除関係 $(\mathbb{N}^{+}, \mid)$、
-$\mathbb{R} \times \mathbb{R}$ の成分ごとの積順序。
-
-<Example title="整除関係と包含関係" id="ex-hasse">
-$30$ の約数の整除関係 $(\{1,2,3,5,6,10,15,30\}, \mid)$ と、
-$\{a, b, c\}$ の部分集合の包含関係 $(\mathcal{P}(\{a,b,c\}), \subseteq)$ は、
-どちらも半順序集合になる。
+<Example title="整除関係" id="ex-divisibility">
+自然数に「割り切る」という関係を入れた $(\mathbb{N}^{+}, \mid)$ は半順序集合になる。
+$1$ から $10$ までを対象とし、$a \mid b$ のときちょうど 1 本の射 $a \to b$ を引くと、次の圏になる。
 </Example>
 
-半順序集合を描くときは、恒等射と合成で導ける射を省き、下から上へ矢印を読む
-**ハッセ図**が便利である。この 2 つをハッセ図にすると**同じ形**が現れる。
-つまり、この 2 つは圏として同型である。
-
 ```tikz
+\usepackage{tikz}
 \begin{document}
 \begin{tikzpicture}[
-  every node/.style={draw, circle, minimum size=10mm, inner sep=1pt, font=\small}
+  every node/.style = {font=\small},
+  obj/.style = {draw, circle, minimum size=8mm, inner sep=0.5pt},
+  hom/.style = {->, shorten >=2pt, shorten <=2pt},
+  idloop/.style = {->, loop, min distance=5mm, looseness=7},
 ]
-% 左: 30 の約数の整除関係
-\node (1)  at (0,0)    {$1$};
-\node (2)  at (-2,1.5) {$2$};
-\node (3)  at (0,1.5)  {$3$};
-\node (5)  at (2,1.5)  {$5$};
-\node (6)  at (-2,3)   {$6$};
-\node (10) at (0,3)    {$10$};
-\node (15) at (2,3)    {$15$};
-\node (30) at (0,4.5)  {$30$};
-\draw (1)--(2) (1)--(3) (1)--(5);
-\draw (2)--(6) (2)--(10) (3)--(6) (3)--(15) (5)--(10) (5)--(15);
-\draw (6)--(30) (10)--(30) (15)--(30);
-% 右: {a,b,c} の部分集合の包含関係
-\node (e)   at (7,0)    {$\emptyset$};
-\node (a)   at (5,1.5)  {$\{a\}$};
-\node (b)   at (7,1.5)  {$\{b\}$};
-\node (c)   at (9,1.5)  {$\{c\}$};
-\node (ab)  at (5,3)    {$\{a,b\}$};
-\node (ac)  at (7,3)    {$\{a,c\}$};
-\node (bc)  at (9,3)    {$\{b,c\}$};
-\node (abc) at (7,4.5)  {$\{a,b,c\}$};
-\draw (e)--(a) (e)--(b) (e)--(c);
-\draw (a)--(ab) (a)--(ac) (b)--(ab) (b)--(bc) (c)--(ac) (c)--(bc);
-\draw (ab)--(abc) (ac)--(abc) (bc)--(abc);
+\node[obj] (n1)  at (0,0)      {$1$};
+\node[obj] (n2)  at (-4,2.5)   {$2$};
+\node[obj] (n3)  at (-1.3,2.5) {$3$};
+\node[obj] (n5)  at (1.8,2.5)  {$5$};
+\node[obj] (n7)  at (4.6,2.5)  {$7$};
+\node[obj] (n4)  at (-6,5.5)   {$4$};
+\node[obj] (n6)  at (-3.2,5.5) {$6$};
+\node[obj] (n9)  at (-0.8,5.5) {$9$};
+\node[obj] (n10) at (2.2,5.5)  {$10$};
+\node[obj] (n8)  at (-6,8.5)   {$8$};
+
+\draw[hom] (n1) -- (n2);
+\draw[hom] (n1) -- (n3);
+\draw[hom] (n1) -- (n5);
+\draw[hom] (n1) -- (n7);
+\draw[hom] (n1) -- (n4);
+\draw[hom] (n1) to[bend left=15] (n6);
+\draw[hom] (n1) -- (n9);
+\draw[hom] (n1) to[bend right=30] (n10);
+\draw[hom] (n1) to[bend left=45] (n8);
+\draw[hom] (n2) -- (n4);
+\draw[hom] (n2) -- (n6);
+\draw[hom] (n2) -- (n10);
+\draw[hom] (n2) to[bend right=15] (n8);
+\draw[hom] (n3) -- (n6);
+\draw[hom] (n3) -- (n9);
+\draw[hom] (n5) -- (n10);
+\draw[hom] (n4) -- (n8);
+
+\draw[idloop] (n1)  edge[in=290,out=250] node[below] {$\mathrm{id}_1$} (n1);
+\draw[idloop] (n2)  edge[in=230,out=190] (n2);
+\draw[idloop] (n3)  edge[in=230,out=190] (n3);
+\draw[idloop] (n5)  edge[in=310,out=270] (n5);
+\draw[idloop] (n7)  edge[in=70,out=110]  (n7);
+\draw[idloop] (n4)  edge[in=20,out=-20]  (n4);
+\draw[idloop] (n6)  edge[in=70,out=110]  (n6);
+\draw[idloop] (n9)  edge[in=70,out=110]  (n9);
+\draw[idloop] (n10) edge[in=70,out=110]  (n10);
+\draw[idloop] (n8)  edge[in=70,out=110]  (n8);
 \end{tikzpicture}
 \end{document}
 ```
+
+各対象の自己ループが恒等射（どの数も自分自身を割り切る）で、$1 \to 2 \to 4 \to 8$ のような
+射の列の合成 $1 \to 8$ もすべて描いてある。なお、順序集合の図示では、恒等射や合成で復元できる
+射を省いた簡略な描き方（ハッセ図）がよく使われる（圏の図ではないので、ここでは余談にとどめる）。
+
+<Example title="包含関係" id="ex-inclusion">
+集合 $X$ の部分集合全体に包含関係を入れた $(\mathcal{P}(X), \subseteq)$ も半順序集合になる。
+$X = \{a, b\}$ のとき、$S \subseteq T$ のときちょうど 1 本の射 $S \to T$ を引くと、次の圏になる。
+</Example>
+
+```tikz
+\usepackage{amssymb}
+\begin{document}
+\begin{tikzpicture}[
+  every node/.style = {font=\small},
+  obj/.style = {draw, circle, minimum size=10mm, inner sep=1pt},
+  hom/.style = {->, shorten >=2pt, shorten <=2pt},
+  idloop/.style = {->, loop, min distance=6mm, looseness=7},
+]
+\node[obj] (e)   at (0,0)      {$\emptyset$};
+\node[obj] (sa)  at (-2.2,2.2) {$\{a\}$};
+\node[obj] (sb)  at (2.2,2.2)  {$\{b\}$};
+\node[obj] (sab) at (0,4.4)    {$\{a,b\}$};
+
+\draw[hom] (e) -- (sa);
+\draw[hom] (e) -- (sb);
+\draw[hom] (sa) -- (sab);
+\draw[hom] (sb) -- (sab);
+\draw[hom] (e) -- (sab);
+
+\draw[idloop] (e)   edge[in=290,out=250] node[below] {$\mathrm{id}_{\emptyset}$} (e);
+\draw[idloop] (sa)  edge[in=160,out=200] (sa);
+\draw[idloop] (sb)  edge[in=20,out=-20]  (sb);
+\draw[idloop] (sab) edge[in=70,out=110]  (sab);
+\end{tikzpicture}
+\end{document}
+```
+
+この圏は、整除関係の図から $1, 2, 5, 10$ だけを取り出した部分と同じ形をしている。
+つまり $(\mathcal{P}(\{a,b\}), \subseteq)$ と $(\{1,2,5,10\}, \mid)$ は圏として同型である。
+ほかにも、$\mathbb{R} \times \mathbb{R}$ に成分ごとの比較を入れた積順序など、
+半順序集合は至るところに現れる。
