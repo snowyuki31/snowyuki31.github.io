@@ -1,0 +1,142 @@
+---
+title: 関手
+description: 圏から圏への、恒等射と合成を保つ対応。準同型・単調写像の一般化。
+---
+
+import { Definition, Example } from '@components/env';
+
+<Definition title="関手" id="def-functor">
+[[圏]] $\mathcal{C}$ から圏 $\mathcal{D}$ への**関手**（functor）$F$ とは、次を満たす対応をいう。
+
+- $\mathcal{C}$ の各対象 $A$ を $\mathcal{D}$ の対象 $F(A)$ に移す
+- $\mathcal{C}$ の各射 $f \colon A \to B$ を $\mathcal{D}$ の射 $F(f) \colon F(A) \to F(B)$ に移す
+- 恒等射を保つ: $F(\mathrm{id}_A) = \mathrm{id}_{F(A)}$
+- 合成を保つ: $F(g \circ f) = F(g) \circ F(f)$
+</Definition>
+
+```tikz
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
+\begin{document}
+\begin{tikzpicture}[
+  every node/.style = {font=\small},
+  obj/.style   = {draw, circle, minimum size=9mm, inner sep=0pt},
+  hom/.style   = {->, shorten >=2pt, shorten <=2pt},
+  idloop/.style = {->, loop, min distance=8mm, looseness=6},
+  fmap/.style  = {->, dashed, gray!70, shorten >=2pt, shorten <=2pt},
+]
+
+% ===== 圏 C（左）=====
+\node[obj] (A) at (0,4)  {$A$};
+\node[obj] (B) at (0,2)  {$B$};
+\node[obj] (C) at (0,0)  {$C$};
+
+\draw[hom] (A) -- node[left]  {$f$} (B);
+\draw[hom] (B) -- node[left]  {$g$} (C);
+\draw[hom, bend right=70] (A) to (C);
+\node at (-2.3,2) {\scriptsize $g\circ f$};
+\draw[idloop] (A) edge[in=150,out=90] node[above] {$\mathrm{id}_A$} (A);
+
+\node at (0,5) {$\mathcal{C}$};
+
+% ===== 圏 D（右）=====
+\node[obj] (FA) at (7,4)  {$F(A)$};
+\node[obj] (FB) at (7,2)  {$F(B)$};
+\node[obj] (FC) at (7,0)  {$F(C)$};
+
+\draw[hom] (FA) -- node[right] {$F(f)$} (FB);
+\draw[hom] (FB) -- node[right] {$F(g)$} (FC);
+\draw[hom, bend left=70] (FA) to (FC);
+\node at (9.3,2) {\scriptsize $F(g)\!\circ\! F(f)$};
+\draw[idloop] (FA) edge[in=90,out=30] node[above] {$\mathrm{id}_{F(A)}$} (FA);
+
+\node at (7,5) {$\mathcal{D}$};
+
+% ===== 関手 F の対応（点線矢印）=====
+\draw[fmap] (A) -- (FA);
+\draw[fmap] (B) -- (FB);
+\draw[fmap] (C) -- (FC);
+\node[gray!70] at (3.5,3.3) {\scriptsize $F$};
+
+\end{tikzpicture}
+\end{document}
+```
+
+関手は、圏の構造（恒等射と合成）を壊さずに一方の圏を他方の圏へ写し取る対応である。
+すでに見た「構造を保つ写像」はどれも関手の特別な場合になっている:
+
+- モノイド準同型は、対象が 1 つの圏（[[モノイド]]）どうしを結ぶ関手（[[モノイドの圏]]）
+- 単調写像は、[[半順序集合]]どうしを結ぶ関手
+
+全く異なる分野に現れる「準同型的なもの」を、関手という 1 つの概念でまとめて扱える。
+
+<Example title="忘却関手" id="ex-forgetful">
+[[モノイドの圏]] $\mathbf{Mon}$ から集合の圏 $\mathbf{Set}$ への関手として、
+モノイド $(M, \cdot, 1_M)$ から演算を忘れて台集合 $M$ だけを残す
+**忘却関手**（forgetful functor）$U$ が考えられる。
+</Example>
+
+```tikz
+\usepackage{amssymb}
+\begin{document}
+\begin{tikzpicture}[>=stealth]
+% left box: Mon
+\node at (1.7,4.0) {$\mathbf{Mon}$};
+\draw[rounded corners, gray] (-0.7,-1.5) rectangle (4.1,3.6);
+\node (MN) at (1.7,2.6) {$(\mathbb{N},+)$};
+\node (MZ) at (1.7,0.0) {$(\mathbb{Z},+)$};
+\draw[->] (MN) -- node[left] {$f: n \mapsto 3n$} (MZ);
+\draw[->] (MN) edge[loop above] node[above] {$\mathrm{id}$} (MN);
+% right box: Set
+\node at (9.3,4.0) {$\mathbf{Set}$};
+\draw[rounded corners, gray] (6.9,-1.5) rectangle (11.7,3.6);
+\node (SN) at (9.3,2.6) {$\mathbb{N}$};
+\node (SZ) at (9.3,0.0) {$\mathbb{Z}$};
+\draw[->] (SN) -- node[right] {$U(f): n \mapsto 3n$} (SZ);
+\draw[->] (SN) edge[loop above] node[above] {$\mathrm{id}$} (SN);
+% the functor
+\draw[->, very thick] (4.5,3.9) -- node[above] {$U$ (forgetful)} (6.5,3.9);
+% object and morphism assignments
+\draw[|->, dashed, gray] (MN) -- node[above] {drop $+$, keep the set} (SN);
+\draw[|->, dashed, gray] (MZ) -- (SZ);
+% functor laws
+\node at (5.5,-2.3) {$U(\mathrm{id}_M) = \mathrm{id}_{U(M)},\qquad U(g \circ f) = U(g) \circ U(f)$};
+\node at (5.5,-3.0) {same map $n \mapsto 3n$, seen without the monoid structure};
+\end{tikzpicture}
+\end{document}
+```
+
+<Example title="自由関手" id="ex-free">
+逆に、集合 $A$ から「$A$ の文字列と連接のモノイド」$A^{*}$ を作る対応は
+$\mathbf{Set}$ から $\mathbf{Mon}$ への関手になり、**自由関手**（free functor）$F$ と呼ぶ。
+</Example>
+
+```tikz
+\usepackage{amssymb}
+\begin{document}
+\begin{tikzpicture}[>=stealth]
+% left box: Set
+\node at (1.5,4.0) {$\mathbf{Set}$};
+\draw[rounded corners, gray] (-0.9,-1.5) rectangle (3.9,3.6);
+\node (SX) at (1.5,2.6) {$\{x\}$};
+\node (SA) at (1.5,0.0) {$\{a,b\}$};
+\draw[->] (SX) -- node[left] {$g: x \mapsto a$} (SA);
+% right box: Mon
+\node at (9.3,4.0) {$\mathbf{Mon}$};
+\draw[rounded corners, gray] (6.3,-1.5) rectangle (12.3,3.6);
+\node (MX) at (9.3,2.6) {$\{x\}^* = \{\varepsilon, x, xx, \ldots\}$};
+\node (MA) at (9.3,0.0) {$\{a,b\}^* = \{\varepsilon, a, b, ab, ba, \ldots\}$};
+\draw[->] (MX) -- node[right] {$F(g): xx \mapsto aa$} (MA);
+% the functor
+\draw[->, very thick] (4.3,3.9) -- node[above] {$F$ (free)} (6.1,3.9);
+% object assignments
+\draw[|->, dashed, gray] (SX) -- node[above] {words + concatenation} (MX);
+\draw[|->, dashed, gray] (SA) -- (MA);
+% notes
+\node at (5.7,-2.3) {$\varepsilon$ = empty word (unit), $\{x\}^* \cong (\mathbb{N},+)$ via $x^n \leftrightarrow n$};
+\node at (5.7,-3.0) {$F(g)$ replaces each letter by its image: no relations to check};
+\end{tikzpicture}
+\end{document}
+```
+
+忘却関手 $U$ と自由関手 $F$ が対をなしていることは、先へ進むと随伴という概念につながる。

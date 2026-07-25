@@ -1,0 +1,116 @@
+---
+title: モノイドの圏
+description: モノイドを対象、モノイド準同型を射とする圏 Mon。
+---
+
+import { Definition, Example } from '@components/env';
+
+[[モノイド]] はそれ自体が 1 つの [[圏]] だが、視点を 1 段上げて「モノイド全体」を眺めることもできる。
+そのために、まずモノイドどうしを結ぶ射を定める。
+
+<Definition title="モノイド準同型" id="def-monoid-hom">
+モノイド $(M, \cdot, 1_M)$ から $(N, \ast, 1_N)$ への写像 $f \colon M \to N$ が
+**モノイド準同型**であるとは、任意の $a, b \in M$ について
+
+$$
+f(a \cdot b) = f(a) \ast f(b), \qquad f(1_M) = 1_N
+$$
+
+が成り立つことをいう。
+</Definition>
+
+例: 文字列をその長さに移す $|\cdot| \colon (\Sigma^{*}, {+\!\!+}, \varepsilon) \to (\mathbb{N}, +, 0)$
+は、連接を加法に移す準同型である（$|s \mathbin{+\!\!+} t| = |s| + |t|$、$|\varepsilon| = 0$）。
+剰余を取る $(\mathbb{Z}, +, 0) \to (\mathbb{Z}/n\mathbb{Z}, +, \bar{0})$ も準同型になる。
+
+<Definition title="モノイドの圏" id="def-mon">
+モノイドを対象、モノイド準同型を射とする圏を**モノイドの圏** $\mathbf{Mon}$ と呼ぶ。
+</Definition>
+
+これが圏の公理を満たすことは、次の通り確認できる。
+
+- 恒等射: 恒等写像 $\mathrm{id}_M \colon M \to M$ は準同型である
+- 合成に閉じる: 準同型 $f \colon M \to N$、$g \colon N \to P$ の合成 $g \circ f$ も準同型である
+- 単位律・結合律: 写像の合成の性質からそのまま従う
+
+$\mathbf{Mon}$ の中の様子を描くと、次のようになる:
+
+```tikz
+\usepackage{amssymb}
+\begin{document}
+\begin{tikzpicture}[>=stealth]
+\node at (4.6,4.6) {the category $\mathbf{Mon}$};
+\draw[rounded corners, gray] (-1.6,-2.6) rectangle (10.8,4.1);
+% objects
+\node (T) at (0.0,3.0) {$\mathbf{1}=\{e\}$};
+\node (Nn) at (4.6,3.0) {$(\mathbb{N},+)$};
+\node (Z) at (9.0,3.0) {$(\mathbb{Z},+)$};
+\node (E) at (4.6,-0.4) {$(2\mathbb{N},+)$};
+% identities
+\draw[->] (T) edge[loop above] node[above] {$\mathrm{id}$} (T);
+\draw[->] (Nn) edge[loop above] node[above] {$\mathrm{id}$} (Nn);
+\draw[->] (Z) edge[loop above] node[above] {$\mathrm{id}$} (Z);
+\draw[->] (E) edge[loop below] node[below] {$\mathrm{id}$} (E);
+% trivial homs
+\draw[->, dashed] (T) to[bend left=12] node[above] {$e \mapsto 0$} (Nn);
+\draw[->, dashed] (Nn) to[bend left=12] node[below] {$n \mapsto e$} (T);
+\draw[->, dashed] (T) to[bend right=30] node[below left] {trivial} (E);
+% inclusion: mono but not iso
+\draw[->] (Nn) -- node[above] {$n \mapsto n$} node[below] {not iso} (Z);
+% iso pair
+\draw[->] (Nn) to[bend right=25] node[left] {$n \mapsto 2n$} (E);
+\draw[->] (E) to[bend right=25] node[right] {$2n \mapsto n$} (Nn);
+\node at (4.6,1.3) {$\cong$};
+% zero morphisms between any two objects (via 1)
+\draw[->, dashed] (Z) to[bend left=30] node[below right] {$m \mapsto e$} (E);
+\node[align=left] at (4.6,-3.4) {dashed: trivial homomorphisms (exist between any two monoids)};
+\node[align=left] at (4.6,-4.1) {solid pair $\mathbb{N} \rightleftarrows 2\mathbb{N}$: mutually inverse $\Rightarrow$ isomorphism};
+\end{tikzpicture}
+\end{document}
+```
+
+どの 2 つのモノイドの間にも、すべての元を単位元に移す**自明な準同型**が必ず存在する（図の破線）。
+また $(\mathbb{N}, +)$ と $(2\mathbb{N}, +)$ のように、互いに逆向きの準同型があって合成が恒等射になるとき、
+2 つのモノイドは同型である（逆向きの準同型が存在するだけでは同型とは限らない）。
+
+## 準同型の 2 つの見方
+
+モノイド準同型には 2 つの見方がある。
+
+1. $\mathbf{Mon}$ における 1 本の射
+2. 対象が 1 つの圏どうしを結ぶ [[関手]]
+
+```tikz
+\usepackage{amssymb}
+\begin{document}
+\begin{tikzpicture}[>=stealth]
+% ---- (1) Mon の射としての見方 ----
+\node at (1.6,3.1) {(1) morphism in $\mathbf{Mon}$};
+\draw[rounded corners, gray] (-0.6,-0.6) rectangle (3.8,2.7);
+\node (M) at (0.4,1.9) {$M$};
+\node (N) at (2.8,1.9) {$N$};
+\node (P) at (1.6,0.2) {$P$};
+\draw[->] (M) -- node[above] {$f$} (N);
+\draw[->] (N) -- node[right] {$g$} (P);
+\draw[->] (M) -- node[left] {$g \circ f$} (P);
+\draw[->] (M) edge[loop above] node[above] {$\mathrm{id}_M$} (M);
+% ---- (2) 関手としての見方 ----
+\node at (8.4,3.1) {(2) functor between one-object categories};
+\node at (6.4,2.4) {category $M$};
+\draw[rounded corners, gray] (5.4,-0.6) rectangle (7.4,2.0);
+\node (bm) at (6.4,0.7) {$\bullet$};
+\draw[->] (bm) edge[loop above] node[above] {$a$} (bm);
+\draw[->] (bm) edge[loop below] node[below] {$b$} (bm);
+\node at (10.4,2.4) {category $N$};
+\draw[rounded corners, gray] (9.4,-0.6) rectangle (11.4,2.0);
+\node (bn) at (10.4,0.7) {$\bullet$};
+\draw[->] (bn) edge[loop above] node[above] {$f(a)$} (bn);
+\draw[->] (bn) edge[loop below] node[below] {$f(b)$} (bn);
+\draw[->, thick] (7.6,0.7) -- node[above] {$F = f$} (9.2,0.7);
+\node at (8.4,-1.2) {$F(a \cdot b) = F(a)\,F(b),\quad F(e_M) = e_N$};
+\end{tikzpicture}
+\end{document}
+```
+
+同じ写像が、圏の中の射としても、圏と圏を結ぶ [[関手]] としても読める。
+[[半順序集合]] の単調写像にも同じ 2 つの見方が成り立つ。

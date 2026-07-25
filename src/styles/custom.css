@@ -298,6 +298,27 @@
 	}
 }
 
+/* 1 カラム時はスクロールしても現在地が分かるよう、ノートタイトルを header 直下に固定する */
+@media (max-width: 49.999rem) {
+	main > .content-panel:has(h1) {
+		position: sticky;
+		top: var(--sl-nav-height);
+		z-index: 2;
+		padding-block: 0.7rem;
+		background: #fff;
+		border-bottom: 1px solid var(--kb-gray-200);
+	}
+
+	main > .content-panel:has(h1) h1 {
+		font-size: 1.4rem;
+	}
+
+	/* 区切り線は sticky 側が持つ（既定の panel 間 border-top と二重にしない） */
+	main > .content-panel + .content-panel {
+		border-top: none;
+	}
+}
+
 /* 左: 全ノートの Index */
 .kb-index {
 	font-size: 0.9rem;
@@ -327,8 +348,8 @@
 
 /* 左: MoC ツリー。親（開閉できる行）もリンク、開閉は caret で行う */
 .kb-tree {
-	font-size: 0.9rem;
-	line-height: 1.7;
+	font-size: 0.95rem;
+	line-height: 1.8;
 }
 
 .kb-tree ul {

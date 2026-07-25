@@ -1,0 +1,173 @@
+---
+title: 半順序集合
+description: どの 2 対象の間にも射が高々 1 つしかない圏。展開すると反射律・反対称律・推移律を満たす順序になる。
+---
+
+import { Definition, Example } from '@components/env';
+
+<Definition title="半順序集合" id="def-poset">
+**半順序集合**（poset）とは、どの 2 つの対象の間にも射が**高々 1 つ**しかない [[圏]]
+をいう（互いに射を持つ 2 対象は同一視する）。
+</Definition>
+
+[[モノイド]] が「対象が 1 つ、射がたくさん」の圏だったのに対して、半順序集合はその対極で、
+「対象がたくさん、射は高々 1 本」の圏である。
+
+例として、$10$ の約数 $1, 2, 5, 10$ を対象とし、割り切るときにちょうど 1 本の射を引く:
+
+```tikz
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
+\begin{document}
+\begin{tikzpicture}[
+  every node/.style = {font=\small},
+  obj/.style   = {draw, circle, minimum size=9mm, inner sep=0pt},
+  hom/.style   = {->, shorten >=2pt, shorten <=2pt},
+  idloop/.style = {->, loop, min distance=10mm, looseness=8},
+]
+
+% ===== 対象 =====
+\node[obj] (o1)  at (0,0)   {$1$};
+\node[obj] (o2)  at (-2,2)  {$2$};
+\node[obj] (o5)  at (2,2)   {$5$};
+\node[obj] (o10) at (0,4)   {$10$};
+
+% ===== 恒等射（自己ループ） =====
+\draw[idloop] (o1)  edge[in=210,out=150] node[left]  {$\mathrm{id}_1$}  (o1);
+\draw[idloop] (o2)  edge[in=150,out=90]  node[above] {$\mathrm{id}_2$}  (o2);
+\draw[idloop] (o5)  edge[in=90,out=30]   node[above] {$\mathrm{id}_5$}  (o5);
+\draw[idloop] (o10) edge[in=30,out=-30]  node[right] {$\mathrm{id}_{10}$} (o10);
+
+% ===== 被覆関係の射 =====
+\draw[hom] (o1)  -- (o2);
+\draw[hom] (o1)  -- (o5);
+\draw[hom] (o2)  -- (o10);
+\draw[hom] (o5)  -- (o10);
+
+% ===== 推移的な射（1 -> 10）も省略せず明示 =====
+\draw[hom, bend right=35] (o1) to (o10);
+
+\end{tikzpicture}
+\end{document}
+```
+
+射 $a \to b$ の存在そのものが関係「$a \le b$」を表している。恒等射 $\mathrm{id}_a$ は
+$a \le a$、合成 $a \to b \to c$ から得られる射は $a \le c$ にあたる。これを展開すると、
+次の代数的な定義が得られる。
+
+<Definition title="半順序集合（代数的定義）" id="def-poset-algebraic">
+**半順序集合** $(P, \le)$ とは、集合 $P$ と関係 $\le$ の組で、次を満たすものをいう。
+
+- 反射律: $a \le a$
+- 反対称律: $a \le b$ かつ $b \le a$ ならば $a = b$
+- 推移律: $a \le b$ かつ $b \le c$ ならば $a \le c$
+</Definition>
+
+反射律が恒等射、推移律が合成、反対称律が「互いに射を持つ対象の同一視」に対応する。
+全順序と違って、どちらの向きにも射がない（比較できない）対があってよい。
+
+例: 部分集合の包含 $(\mathcal{P}(X), \subseteq)$、自然数の整除関係 $(\mathbb{N}^{+}, \mid)$、
+$\mathbb{R} \times \mathbb{R}$ の成分ごとの積順序。
+
+<Example title="ハッセ図と同型" id="ex-hasse">
+半順序集合は、恒等射と合成で導ける射を省いた**ハッセ図**（下から上へ矢印を読む）で描くと見通しがよい。
+$30$ の約数の整除関係と、$\{a, b, c\}$ の部分集合の包含関係をハッセ図にすると、**同じ形**が現れる。
+つまりこの 2 つは圏として同型である。
+</Example>
+
+```tikz
+\begin{document}
+\begin{tikzpicture}[
+  every node/.style={draw, circle, minimum size=10mm, inner sep=1pt, font=\small}
+]
+% 左: 30 の約数の整除関係
+\node (1)  at (0,0)    {$1$};
+\node (2)  at (-2,1.5) {$2$};
+\node (3)  at (0,1.5)  {$3$};
+\node (5)  at (2,1.5)  {$5$};
+\node (6)  at (-2,3)   {$6$};
+\node (10) at (0,3)    {$10$};
+\node (15) at (2,3)    {$15$};
+\node (30) at (0,4.5)  {$30$};
+\draw (1)--(2) (1)--(3) (1)--(5);
+\draw (2)--(6) (2)--(10) (3)--(6) (3)--(15) (5)--(10) (5)--(15);
+\draw (6)--(30) (10)--(30) (15)--(30);
+% 右: {a,b,c} の部分集合の包含関係
+\node (e)   at (7,0)    {$\emptyset$};
+\node (a)   at (5,1.5)  {$\{a\}$};
+\node (b)   at (7,1.5)  {$\{b\}$};
+\node (c)   at (9,1.5)  {$\{c\}$};
+\node (ab)  at (5,3)    {$\{a,b\}$};
+\node (ac)  at (7,3)    {$\{a,c\}$};
+\node (bc)  at (9,3)    {$\{b,c\}$};
+\node (abc) at (7,4.5)  {$\{a,b,c\}$};
+\draw (e)--(a) (e)--(b) (e)--(c);
+\draw (a)--(ab) (a)--(ac) (b)--(ab) (b)--(bc) (c)--(ac) (c)--(bc);
+\draw (ab)--(abc) (ac)--(abc) (bc)--(abc);
+\end{tikzpicture}
+\end{document}
+```
+
+## 単調写像
+
+半順序集合 $(P, \le)$ から $(Q, \sqsubseteq)$ への写像 $f$ が**単調写像**であるとは、
+$a \le b$ ならば $f(a) \sqsubseteq f(b)$ が成り立つことをいう。
+半順序集合を圏として見れば、単調写像とは射を射に移す対応、すなわち [[関手]] に他ならない。
+
+例: 部分集合をその要素数に移す
+$|\cdot| \colon (\mathcal{P}(X), \subseteq) \to (\mathbb{N}, \le)$ は単調写像である。
+
+```tikz
+\usepackage{tikz}
+\usepackage{amssymb}
+\begin{document}
+\begin{tikzpicture}[
+  every node/.style = {font=\small},
+  set/.style   = {draw, rounded corners, inner sep=3pt},
+  num/.style   = {draw, circle, minimum size=8mm},
+  cover/.style = {semithick},
+  map/.style   = {->, dashed, gray!70},
+]
+\node[set] (e)   at (0,0)    {$\varnothing$};
+\node[set] (a)   at (-2.4,2) {$\{a\}$};
+\node[set] (b)   at (0,2)    {$\{b\}$};
+\node[set] (c)   at (2.4,2)  {$\{c\}$};
+\node[set] (ab)  at (-2.4,4) {$\{a,b\}$};
+\node[set] (ac)  at (0,4)    {$\{a,c\}$};
+\node[set] (bc)  at (2.4,4)  {$\{b,c\}$};
+\node[set] (abc) at (0,6)    {$\{a,b,c\}$};
+
+\draw[cover] (e)--(a) (e)--(b) (e)--(c);
+\draw[cover] (a)--(ab) (a)--(ac);
+\draw[cover] (b)--(ab) (b)--(bc);
+\draw[cover] (c)--(ac) (c)--(bc);
+\draw[cover] (ab)--(abc) (ac)--(abc) (bc)--(abc);
+
+\node[num] (n0) at (9,0) {$0$};
+\node[num] (n1) at (9,2) {$1$};
+\node[num] (n2) at (9,4) {$2$};
+\node[num] (n3) at (9,6) {$3$};
+\draw[cover] (n0)--(n1)--(n2)--(n3);
+\draw[cover] (n3) -- ++(0,1) node[above] {$\vdots$};
+
+% ===== 写像 |-|（レベル 1・2 は扇状に振って重なりを回避）=====
+\draw[map] (e)--(n0);
+
+\draw[map] (a) to[out=-25,in=190] (n1);
+\draw[map] (b) to[out=-15,in=185] (n1);
+\draw[map] (c) to[out=-5, in=180] (n1);
+
+\draw[map] (ab) to[out=-25,in=190] (n2);
+\draw[map] (ac) to[out=-15,in=185] (n2);
+\draw[map] (bc) to[out=-5, in=180] (n2);
+
+\draw[map] (abc)--(n3);
+
+\node at (4.5,7) {$|\cdot|\colon(\mathcal{P}(X),\subseteq)\to(\mathbb{N},\le)$};
+\end{tikzpicture}
+\end{document}
+```
+
+単調写像は個々の構造を変えるが、「順序がある」という構造自体は壊さない。
+モノイド準同型（[[モノイドの圏]]）と単調写像という、全く異なる分野の対応が同じ性質を示すこと——
+これを一般化したものが [[関手]] である。
