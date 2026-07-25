@@ -69,5 +69,17 @@ $0$ はすべての数の倍数なので、約数としては最強であり、$
 同じ射を 2 回合成しても変わらない圏になっている。
 </Example>
 
+合成の図式は連接とまったく同じ形だが、今度は積が「潰す」向きに働く。
+$12$ と $18$ の合成は $\gcd(12, 18) = 6$ になる。
+
+```tikz
+\usepackage{tikz-cd}
+\begin{document}
+\begin{tikzcd}[column sep=huge]
+\ast \arrow[r, "12"] \arrow[rr, bend right=40, "6"'] & \ast \arrow[r, "18"] & \ast
+\end{tikzcd}
+\end{document}
+```
+
 整除関係 $m \mid n$ を順序と見ると、$\gcd$ は 2 数の最大下界（meet）であり、
 単位元 $0$ はこの順序の最大元にあたる。
