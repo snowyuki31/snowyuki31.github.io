@@ -28,6 +28,7 @@
 	--sl-mobile-toc-height: 0rem;
 
 	/* 見出しは控えめに（本文の従属物であって章扉ではない） */
+	--sl-text-h1: 1.8rem;
 	--sl-text-h2: 1.3rem;
 	--sl-text-h3: 1.1rem;
 	--sl-text-h4: 1rem;
@@ -295,27 +296,6 @@
 
 	header.header {
 		padding-inline-start: calc(var(--sl-nav-pad-x) + var(--sl-menu-button-size) + 0.6rem);
-	}
-}
-
-/* 1 カラム時はスクロールしても現在地が分かるよう、ノートタイトルを header 直下に固定する */
-@media (max-width: 49.999rem) {
-	main > .content-panel:has(h1) {
-		position: sticky;
-		top: var(--sl-nav-height);
-		z-index: 2;
-		padding-block: 0.7rem;
-		background: #fff;
-		border-bottom: 1px solid var(--kb-gray-200);
-	}
-
-	main > .content-panel:has(h1) h1 {
-		font-size: 1.4rem;
-	}
-
-	/* 区切り線は sticky 側が持つ（既定の panel 間 border-top と二重にしない） */
-	main > .content-panel + .content-panel {
-		border-top: none;
 	}
 }
 
