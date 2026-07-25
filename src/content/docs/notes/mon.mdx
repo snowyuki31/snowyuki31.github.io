@@ -19,9 +19,26 @@ $$
 が成り立つことをいう。
 </Definition>
 
-例: 文字列をその長さに移す $|\cdot| \colon (\Sigma^{*}, {+\!\!+}, \varepsilon) \to (\mathbb{N}, +, 0)$
+<Example title="文字列の長さ" id="ex-length">
+文字列をその長さに移す $|\cdot| \colon (\Sigma^{*}, {+\!\!+}, \varepsilon) \to (\mathbb{N}, +, 0)$
 は、連接を加法に移す準同型である（$|s \mathbin{+\!\!+} t| = |s| + |t|$、$|\varepsilon| = 0$）。
-剰余を取る $(\mathbb{Z}, +, 0) \to (\mathbb{Z}/n\mathbb{Z}, +, \bar{0})$ も準同型になる。
+</Example>
+
+準同型の条件は、「先に演算してから移す」と「移してから演算する」が一致すること、
+すなわち次の図式が可換であることに他ならない。
+
+```tikz
+\usepackage{tikz-cd}
+\usepackage{amssymb}
+\begin{document}
+\begin{tikzcd}[row sep=huge, column sep=huge]
+\Sigma^{*}\times\Sigma^{*} \arrow[r, "{+\!\!+}"] \arrow[d, "{|\cdot|}\times{|\cdot|}"'] & \Sigma^{*} \arrow[d, "{|\cdot|}"] \\
+\mathbb{N}\times\mathbb{N} \arrow[r, "+"'] & \mathbb{N}
+\end{tikzcd}
+\end{document}
+```
+
+同様に、剰余を取る $(\mathbb{Z}, +, 0) \to (\mathbb{Z}/n\mathbb{Z}, +, \bar{0})$ も準同型になる。
 
 <Definition title="モノイドの圏" id="def-mon">
 モノイドを対象、モノイド準同型を射とする圏を**モノイドの圏** $\mathbf{Mon}$ と呼ぶ。
@@ -33,84 +50,71 @@ $$
 - 合成に閉じる: 準同型 $f \colon M \to N$、$g \colon N \to P$ の合成 $g \circ f$ も準同型である
 - 単位律・結合律: 写像の合成の性質からそのまま従う
 
-$\mathbf{Mon}$ の中の様子を描くと、次のようになる:
+抽象的に描くと次のようになる。[[半順序集合]] と違って、2 つの対象の間に
+複数の射（$f$ と $f'$ のような平行な準同型）があってよい。
 
 ```tikz
-\usepackage{amssymb}
+\usepackage{tikz}
 \begin{document}
-\begin{tikzpicture}[>=stealth]
-\node at (4.6,4.6) {the category $\mathbf{Mon}$};
-\draw[rounded corners, gray] (-1.6,-2.6) rectangle (10.8,4.1);
-% objects
-\node (T) at (0.0,3.0) {$\mathbf{1}=\{e\}$};
-\node (Nn) at (4.6,3.0) {$(\mathbb{N},+)$};
-\node (Z) at (9.0,3.0) {$(\mathbb{Z},+)$};
-\node (E) at (4.6,-0.4) {$(2\mathbb{N},+)$};
-% identities
-\draw[->] (T) edge[loop above] node[above] {$\mathrm{id}$} (T);
-\draw[->] (Nn) edge[loop above] node[above] {$\mathrm{id}$} (Nn);
-\draw[->] (Z) edge[loop above] node[above] {$\mathrm{id}$} (Z);
-\draw[->] (E) edge[loop below] node[below] {$\mathrm{id}$} (E);
-% trivial homs
-\draw[->, dashed] (T) to[bend left=12] node[above] {$e \mapsto 0$} (Nn);
-\draw[->, dashed] (Nn) to[bend left=12] node[below] {$n \mapsto e$} (T);
-\draw[->, dashed] (T) to[bend right=30] node[below left] {trivial} (E);
-% inclusion: mono but not iso
-\draw[->] (Nn) -- node[above] {$n \mapsto n$} node[below] {not iso} (Z);
-% iso pair
-\draw[->] (Nn) to[bend right=25] node[left] {$n \mapsto 2n$} (E);
-\draw[->] (E) to[bend right=25] node[right] {$2n \mapsto n$} (Nn);
-\node at (4.6,1.3) {$\cong$};
-% zero morphisms between any two objects (via 1)
-\draw[->, dashed] (Z) to[bend left=30] node[below right] {$m \mapsto e$} (E);
-\node[align=left] at (4.6,-3.4) {dashed: trivial homomorphisms (exist between any two monoids)};
-\node[align=left] at (4.6,-4.1) {solid pair $\mathbb{N} \rightleftarrows 2\mathbb{N}$: mutually inverse $\Rightarrow$ isomorphism};
+\begin{tikzpicture}[
+  every node/.style = {font=\small},
+  obj/.style = {draw, circle, minimum size=9mm, inner sep=0pt},
+  hom/.style = {->, shorten >=2pt, shorten <=2pt},
+  idloop/.style = {->, loop, min distance=8mm, looseness=8},
+]
+\node[obj] (M) at (0,2.5)  {$M$};
+\node[obj] (N) at (4.5,2.5) {$N$};
+\node[obj] (P) at (2.25,-0.5) {$P$};
+
+\draw[hom] (M) to[bend left=15] node[above] {$f$} (N);
+\draw[hom] (M) to[bend right=15] node[below] {$f'$} (N);
+\draw[hom] (N) -- node[below right] {$g$} (P);
+\draw[hom] (M) -- node[below left] {$g \circ f$} (P);
+
+\draw[idloop] (M) edge[in=160,out=200] node[left] {$\mathrm{id}_M$} (M);
+\draw[idloop] (N) edge[in=20,out=-20] node[right] {$\mathrm{id}_N$} (N);
+\draw[idloop] (P) edge[in=290,out=250] node[below] {$\mathrm{id}_P$} (P);
 \end{tikzpicture}
 \end{document}
 ```
 
-どの 2 つのモノイドの間にも、すべての元を単位元に移す**自明な準同型**が必ず存在する（図の破線）。
-また $(\mathbb{N}, +)$ と $(2\mathbb{N}, +)$ のように、互いに逆向きの準同型があって合成が恒等射になるとき、
-2 つのモノイドは同型である（逆向きの準同型が存在するだけでは同型とは限らない）。
-
-## 準同型の 2 つの見方
-
-モノイド準同型には 2 つの見方がある。
-
-1. $\mathbf{Mon}$ における 1 本の射
-2. 対象が 1 つの圏どうしを結ぶ [[関手]]
+具体的な対象を入れてみる。たとえば次の 4 つはどれもモノイドである:
+自明なモノイド $\mathbf{1} = \{e\}$、自然数の加法 $(\mathbb{N}, +, 0)$、
+偶数の加法 $(2\mathbb{N}, +, 0)$、整数の加法 $(\mathbb{Z}, +, 0)$。
+これらの間の準同型を描くと、$\mathbf{Mon}$ の一角が見えてくる。
 
 ```tikz
+\usepackage{tikz}
 \usepackage{amssymb}
 \begin{document}
-\begin{tikzpicture}[>=stealth]
-% ---- (1) Mon の射としての見方 ----
-\node at (1.6,3.1) {(1) morphism in $\mathbf{Mon}$};
-\draw[rounded corners, gray] (-0.6,-0.6) rectangle (3.8,2.7);
-\node (M) at (0.4,1.9) {$M$};
-\node (N) at (2.8,1.9) {$N$};
-\node (P) at (1.6,0.2) {$P$};
-\draw[->] (M) -- node[above] {$f$} (N);
-\draw[->] (N) -- node[right] {$g$} (P);
-\draw[->] (M) -- node[left] {$g \circ f$} (P);
-\draw[->] (M) edge[loop above] node[above] {$\mathrm{id}_M$} (M);
-% ---- (2) 関手としての見方 ----
-\node at (8.4,3.1) {(2) functor between one-object categories};
-\node at (6.4,2.4) {category $M$};
-\draw[rounded corners, gray] (5.4,-0.6) rectangle (7.4,2.0);
-\node (bm) at (6.4,0.7) {$\bullet$};
-\draw[->] (bm) edge[loop above] node[above] {$a$} (bm);
-\draw[->] (bm) edge[loop below] node[below] {$b$} (bm);
-\node at (10.4,2.4) {category $N$};
-\draw[rounded corners, gray] (9.4,-0.6) rectangle (11.4,2.0);
-\node (bn) at (10.4,0.7) {$\bullet$};
-\draw[->] (bn) edge[loop above] node[above] {$f(a)$} (bn);
-\draw[->] (bn) edge[loop below] node[below] {$f(b)$} (bn);
-\draw[->, thick] (7.6,0.7) -- node[above] {$F = f$} (9.2,0.7);
-\node at (8.4,-1.2) {$F(a \cdot b) = F(a)\,F(b),\quad F(e_M) = e_N$};
+\begin{tikzpicture}[
+  every node/.style = {font=\small},
+  hom/.style = {->, shorten >=3pt, shorten <=3pt},
+  idloop/.style = {->, loop, min distance=6mm, looseness=7},
+]
+\node (T) at (0,3)   {$\mathbf{1}=\{e\}$};
+\node (Nn) at (4.5,3) {$(\mathbb{N},+)$};
+\node (Z) at (9,3)   {$(\mathbb{Z},+)$};
+\node (E) at (4.5,0) {$(2\mathbb{N},+)$};
+
+\draw[idloop] (T)  edge[in=160,out=200] node[left] {$\mathrm{id}$} (T);
+\draw[idloop] (Nn) edge[in=70,out=110] (Nn);
+\draw[idloop] (Z)  edge[in=20,out=-20] (Z);
+\draw[idloop] (E)  edge[in=290,out=250] (E);
+
+\draw[hom, dashed] (T) -- node[above] {$e \mapsto 0$} (Nn);
+\draw[hom] (Nn) -- node[above] {$n \mapsto n$} (Z);
+\draw[hom] (Nn) to[bend right=20] node[left] {$n \mapsto 2n$} (E);
+\draw[hom] (E) to[bend right=20] node[right] {$2n \mapsto n$} (Nn);
+\node at (4.5,1.5) {$\cong$};
+\draw[hom, dashed] (Z) to[bend left=20] node[below right] {$m \mapsto 0$} (E);
 \end{tikzpicture}
 \end{document}
 ```
 
-同じ写像が、圏の中の射としても、圏と圏を結ぶ [[関手]] としても読める。
-[[半順序集合]] の単調写像にも同じ 2 つの見方が成り立つ。
+どの 2 つのモノイドの間にも、すべての元を単位元に移す**自明な準同型**が必ず存在する（図の破線はその一部）。
+$(\mathbb{N}, +)$ と $(2\mathbb{N}, +)$ のように、互いに逆向きの準同型があって合成が恒等射になるとき、
+2 つのモノイドは同型である（$\mathbb{N} \to \mathbb{Z}$ のように、逆向きの準同型が存在するだけでは
+同型とは限らない）。
+
+なお、モノイド準同型は「対象が 1 つの圏どうしを結ぶ [[関手]]」と見ることもできる。
