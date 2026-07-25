@@ -11,12 +11,24 @@ function esc(s) {
 }
 
 function nodeHtml(n) {
-  const cls = ['moc-node', n.isMoc ? 'moc-node--moc' : null, n.broken ? 'moc-node--broken' : null]
+  const cls = [
+    'moc-node',
+    n.isMoc ? 'moc-node--moc' : null,
+    n.broken ? 'moc-node--broken' : null,
+    n.current ? 'moc-node--current' : null,
+  ]
     .filter(Boolean)
     .join(' ');
+  // 現在ページのノードは自己リンクにしない
+  if (n.current) return `<span class="${cls}" aria-current="page">${esc(n.title)}</span>`;
   return n.href
     ? `<a class="${cls}" href="${n.href}">${esc(n.title)}</a>`
     : `<span class="${cls}">${esc(n.title)}</span>`;
+}
+
+function htmlSet(nf, resolve) {
+  const items = nf.nodes.map((t) => nodeHtml(resolve(t)));
+  return `<figure class="moc-diagram moc-diagram--set">${items.join('')}</figure>`;
 }
 
 function htmlSequence(nf, resolve) {
@@ -114,14 +126,20 @@ function svgGraph(nf, resolve) {
   }
   nodes.forEach((n, i) => {
     const p = pos[i];
-    const rect = `<rect x="${p.x}" y="${p.y}" width="${p.w}" height="${NH}" fill="#fff" stroke="${
-      n.broken ? '#adb5bd' : '#000'
-    }"${n.broken ? ' stroke-dasharray="4 3"' : ''}/>`;
+    const rect = `<rect x="${p.x}" y="${p.y}" width="${p.w}" height="${NH}" fill="${
+      n.current ? '#000' : '#fff'
+    }" stroke="${n.broken ? '#adb5bd' : '#000'}"${n.broken ? ' stroke-dasharray="4 3"' : ''}/>`;
     const dbl = n.isMoc
-      ? `<rect x="${p.x + 2.5}" y="${p.y + 2.5}" width="${p.w - 5}" height="${NH - 5}" fill="none" stroke="#000"/>`
+      ? `<rect x="${p.x + 2.5}" y="${p.y + 2.5}" width="${p.w - 5}" height="${NH - 5}" fill="none" stroke="${n.current ? '#fff' : '#000'}"/>`
       : '';
-    const label = `<text x="${p.x + p.w / 2}" y="${p.y + NH / 2}" text-anchor="middle" dominant-baseline="central" font-size="${FS}" fill="#000">${esc(n.title)}</text>`;
-    parts.push(n.href ? `<a href="${n.href}">${rect}${dbl}${label}</a>` : `<g>${rect}${dbl}${label}</g>`);
+    const label = `<text x="${p.x + p.w / 2}" y="${p.y + NH / 2}" text-anchor="middle" dominant-baseline="central" font-size="${FS}" fill="${
+      n.current ? '#fff' : '#000'
+    }">${esc(n.title)}</text>`;
+    parts.push(
+      n.href && !n.current
+        ? `<a href="${n.href}">${rect}${dbl}${label}</a>`
+        : `<g${n.current ? ' aria-current="page"' : ''}>${rect}${dbl}${label}</g>`,
+    );
   });
 
   return `<figure class="moc-diagram moc-diagram--graph"><svg viewBox="0 0 ${totalW} ${totalH}" width="${totalW}" height="${totalH}" role="img" aria-label="MoC 図式">${parts.join('')}</svg></figure>`;
@@ -129,11 +147,12 @@ function svgGraph(nf, resolve) {
 
 /**
  * @param nf parseMoc の正規形
- * @param resolve (title) => { title, href: string|null, isMoc: boolean, broken: boolean }
+ * @param resolve (title) => { title, href: string|null, isMoc: boolean, broken: boolean, current?: boolean }
  */
 export function renderMocDiagram(nf, resolve) {
   if (nf.nodes.length === 0) return '';
   if (nf.kind === 'graph') return svgGraph(nf, resolve);
   if (nf.kind === 'grouping') return htmlGrouping(nf, resolve);
+  if (nf.kind === 'set') return htmlSet(nf, resolve);
   return htmlSequence(nf, resolve);
 }

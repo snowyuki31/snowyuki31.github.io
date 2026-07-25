@@ -56,7 +56,10 @@ export function scanNotes() {
     const slug = toSlug(relPath);
     const title = frontmatterTitle(source) ?? slug;
     const titlesIn = (text) => [...text.matchAll(WIKILINK_RE)].map((m) => m[1].trim());
-    const mocBodies = [...source.matchAll(MOC_RE)].map((m) => m[2]);
+    const mocBlocks = [...source.matchAll(MOC_RE)].map((m) => ({
+      kind: m[1].match(/kind\s*=\s*"([^"]*)"/)?.[1] ?? 'sequence',
+      body: m[2],
+    }));
     const note = {
       slug,
       title,
@@ -64,8 +67,9 @@ export function scanNotes() {
       // 本文（Moc 外）の言及。backlinks はこちらを使う
       proseTitles: titlesIn(source.replace(MOC_RE, '')),
       // 目録に載っているノート = このページの子
-      mocTitles: [...new Set(mocBodies.flatMap(titlesIn))],
-      isMoc: mocBodies.length > 0,
+      mocTitles: [...new Set(mocBlocks.flatMap((b) => titlesIn(b.body)))],
+      mocBlocks,
+      isMoc: mocBlocks.length > 0,
     };
     notes.push(note);
     byTitle.set(title, note);

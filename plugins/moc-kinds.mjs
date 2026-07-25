@@ -18,6 +18,13 @@ function dedupe(titles) {
 }
 
 const kinds = {
+  // 集合: J = 離散圏。順序も辺もなく、ただ並べる（Home の最上位一覧など）
+  set: {
+    parse(text) {
+      return { nodes: dedupe(linkTitles(text)), edges: [], groups: [] };
+    },
+  },
+
   // 順序: J = 有限全順序。並び順そのものが価値。連続する 2 つを辺で結ぶ
   sequence: {
     parse(text) {

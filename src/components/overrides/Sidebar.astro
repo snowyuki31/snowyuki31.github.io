@@ -1,0 +1,27 @@
+---
+// Sidebar override — 左サイドバー。
+// header は 2 カラム以上で消すので、左上が Home へのリンク（wordmark）になる。
+// その下に MoC（目録を持つノート）だけの階層ツリー。個々のノートは出さない。
+import { mocTree } from '../../../plugins/hierarchy.mjs';
+import TreeItem from '../TreeItem.astro';
+
+const route = (Astro.locals as any)?.starlightRoute;
+const raw: string = route?.id ?? route?.entry?.id ?? '';
+const slug = raw === 'index' ? '' : raw.replace(/\/index$/, '');
+const tree = mocTree();
+---
+
+<div class="kb-side">
+  <a class="kb-wordmark" href="/">snowyuki31</a>
+  {
+    tree.length > 0 && (
+      <nav class="kb-tree" aria-label="Map of Contents">
+        <ul>
+          {tree.map((n) => (
+            <TreeItem node={n} current={slug} />
+          ))}
+        </ul>
+      </nav>
+    )
+  }
+</div>

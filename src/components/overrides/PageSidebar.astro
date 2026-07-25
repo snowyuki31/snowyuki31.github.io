@@ -1,0 +1,30 @@
+---
+// PageSidebar override — 右サイドバー。目次（On this page）の代わりに、
+// このノートが載っている目録（MoC）の図式を親 MoC ごとに描く。
+// 現在ページのノードはハイライトされる = いま読んでいる位置の座標表示。
+import { contextMocsFor } from '../../../plugins/hierarchy.mjs';
+
+const route = (Astro.locals as any)?.starlightRoute;
+const raw: string = route?.id ?? route?.entry?.id ?? '';
+const slug = raw === 'index' ? '' : raw.replace(/\/index$/, '');
+
+const contexts = slug === '' ? [] : contextMocsFor(slug);
+---
+
+{
+  contexts.length > 0 && (
+    <div class="kb-context">
+      <h2 class="kb-context-title">このノートの位置</h2>
+      {contexts.map((c) => (
+        <section>
+          <h3>
+            <a href={c.slug === '' ? '/' : `/${c.slug}/`}>{c.title}</a>
+          </h3>
+          {c.diagrams.map((d: string) => (
+            <Fragment set:html={d} />
+          ))}
+        </section>
+      ))}
+    </div>
+  )
+}

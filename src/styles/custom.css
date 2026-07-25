@@ -231,6 +231,141 @@
 	white-space: pre-wrap;
 }
 
+/* --- chrome: header / sidebar ------------------------------------- */
+
+/* 2 カラム以上では header を出さない（Home へのリンクは左サイドバー上端の wordmark） */
+@media (min-width: 50rem) {
+	:root,
+	:root[data-theme='light'] {
+		--sl-nav-height: 0rem;
+	}
+
+	header.header {
+		display: none;
+	}
+}
+
+.kb-wordmark {
+	display: inline-block;
+	margin: 0.4rem 0 0.9rem;
+	color: #000;
+	font-size: 1rem;
+	font-weight: 700;
+	text-decoration: none;
+}
+
+.kb-wordmark:hover {
+	text-decoration: underline;
+}
+
+/* 左: MoC ツリー。親（開閉できる行）もリンク、開閉は caret で行う */
+.kb-tree {
+	font-size: 0.9rem;
+	line-height: 1.7;
+}
+
+.kb-tree ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.kb-tree ul ul {
+	margin-left: 0.25rem;
+	padding-left: 0.85rem;
+	border-left: 1px solid var(--kb-gray-200);
+}
+
+.kb-tree a {
+	color: var(--kb-gray-700);
+	text-decoration: none;
+}
+
+.kb-tree a:hover {
+	color: #000;
+	text-decoration: underline;
+}
+
+.kb-tree a[aria-current='page'] {
+	color: #000;
+	font-weight: 700;
+}
+
+.kb-tree summary {
+	display: flex;
+	align-items: center;
+	gap: 0.35rem;
+	list-style: none;
+}
+
+.kb-tree summary::-webkit-details-marker {
+	display: none;
+}
+
+.kb-caret {
+	cursor: pointer;
+	color: var(--kb-gray-500);
+}
+
+.kb-caret::before {
+	content: '▸';
+	display: inline-block;
+	transition: transform 0.15s ease;
+}
+
+.kb-tree details[open] > summary .kb-caret::before {
+	transform: rotate(90deg);
+}
+
+/* 右: このノートが属する MoC の図式（目次の代わり） */
+.kb-context-title {
+	margin: 0 0 0.7rem;
+	color: var(--kb-gray-700);
+	font-size: 0.8rem;
+	font-weight: 700;
+	letter-spacing: 0.05em;
+}
+
+.kb-context section + section {
+	margin-top: 1.1rem;
+}
+
+.kb-context h3 {
+	margin: 0 0 0.2rem;
+	font-size: 0.85rem;
+	font-weight: 700;
+}
+
+.kb-context h3 a {
+	color: #000;
+	text-decoration: none;
+}
+
+.kb-context h3 a:hover {
+	text-decoration: underline;
+}
+
+.kb-context .moc-diagram {
+	margin: 0.5rem 0;
+}
+
+/* 狭いペインでは鎖を縦に */
+.kb-context .moc-diagram--sequence {
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 0.3rem;
+}
+
+.kb-context .moc-diagram--sequence .moc-arrow {
+	margin-left: 1.05rem;
+	transform: rotate(90deg);
+}
+
+.kb-context .moc-node {
+	padding: 0.18rem 0.5rem;
+	font-size: 0.8rem;
+}
+
 /* --- breadcrumbs（現在位置。多親なら全系統） ------------------------ */
 
 .breadcrumbs {
@@ -303,6 +438,22 @@
 .moc-node--broken {
 	border-style: dashed;
 	color: var(--kb-gray-500);
+}
+
+/* 現在ページのノード（右サイドバーの文脈図式で使う） */
+.moc-node--current,
+.moc-node--current:hover {
+	background: #000;
+	color: #fff;
+}
+
+/* set: 離散圏。並べるだけ */
+.moc-diagram--set {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.65rem;
+	padding: 4px;
 }
 
 /* sequence: 鎖 */

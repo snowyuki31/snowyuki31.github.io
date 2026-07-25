@@ -1,0 +1,31 @@
+---
+// TreeItem — MoC ツリーの 1 ノード（再帰）。
+// 親もリンク（クリックでそのページへ）、開閉は caret 側で行う。
+interface Props {
+  node: { title: string; slug: string; children: any[] };
+  current: string;
+}
+const { node, current } = Astro.props;
+const href = node.slug === '' ? '/' : `/${node.slug}/`;
+const aria = current === node.slug ? 'page' : undefined;
+---
+
+<li>
+  {
+    node.children.length > 0 ? (
+      <details open>
+        <summary>
+          <a href={href} aria-current={aria}>{node.title}</a>
+          <span class="kb-caret" aria-hidden="true" />
+        </summary>
+        <ul>
+          {node.children.map((c) => (
+            <Astro.self node={c} current={current} />
+          ))}
+        </ul>
+      </details>
+    ) : (
+      <a href={href} aria-current={aria}>{node.title}</a>
+    )
+  }
+</li>
