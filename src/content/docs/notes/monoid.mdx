@@ -52,7 +52,7 @@ $\mathtt{abcba} = \mathtt{abc} \mathbin{+\!\!+} \mathtt{ba}$。
 \usepackage{tikz-cd}
 \begin{document}
 \begin{tikzcd}[column sep=large]
-\ast \arrow[r, "\mathtt{ab}"] \arrow[rr, bend right=30, "\mathtt{abc}"'] \arrow[rrr, bend right=50, "\mathtt{abcba}"'] & \ast \arrow[r, "\mathtt{c}"] & \ast \arrow[r, "\mathtt{ba}"] & \ast
+\ast \arrow[loop above, "\varepsilon"] \arrow[r, "\mathtt{ab}"] \arrow[rr, bend right=30, "\mathtt{abc}"'] \arrow[rrr, bend right=50, "\mathtt{abcba}"'] & \ast \arrow[r, "\mathtt{c}"] & \ast \arrow[r, "\mathtt{ba}"] & \ast
 \end{tikzcd}
 \end{document}
 ```
@@ -74,7 +74,7 @@ $12$ と $18$ の合成は $\gcd(12, 18) = 6$、さらに $8$ と合成すると
 \usepackage{tikz-cd}
 \begin{document}
 \begin{tikzcd}[column sep=large]
-\ast \arrow[r, "12"] \arrow[rr, bend right=30, "6"'] \arrow[rrr, bend right=50, "2"'] & \ast \arrow[r, "18"] & \ast \arrow[r, "8"] & \ast
+\ast \arrow[loop above, "0"] \arrow[r, "12"] \arrow[rr, bend right=30, "6"'] \arrow[rrr, bend right=50, "2"'] & \ast \arrow[r, "18"] & \ast \arrow[r, "8"] & \ast
 \end{tikzcd}
 \end{document}
 ```
