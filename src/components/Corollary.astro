@@ -1,0 +1,10 @@
+---
+import Plate from './Plate.astro';
+interface Props {
+  title?: string;
+  id?: string;
+  section?: number;
+}
+---
+
+<Plate kind="系" {...Astro.props}><slot /></Plate>

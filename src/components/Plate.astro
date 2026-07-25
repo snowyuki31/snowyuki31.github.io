@@ -1,0 +1,42 @@
+---
+// Plate — 定義・命題・定理などの「主張のプレート」。
+//
+// 採番は CSS counter（.sl-markdown-content で reset、.plate で increment）。
+// 種別をまたいで 1 本の通し番号になる = 定義2.1 → 命題2.2 → 定理2.3。
+// 章番号は page frontmatter の `section` から取る。
+interface Props {
+  kind: string;
+  title?: string;
+  id?: string;
+  section?: number;
+}
+const { kind, title, id, section: sectionProp } = Astro.props;
+
+const route = (Astro.locals as any)?.starlightRoute;
+const section = sectionProp ?? route?.entry?.data?.section;
+
+const label = title ? `${kind}（${title}）` : kind;
+const style = [
+  `--plate-kind:'${kind}'`,
+  section != null ? `--plate-section:'${section}.'` : null,
+]
+  .filter(Boolean)
+  .join(';');
+---
+
+<div class="plate" id={id} style={style}>
+  <p class="plate-head">
+    {/* 番号は CSS counter が描くので、読み上げには sr-only の実テキストを渡す */}
+    <span class="plate-label" aria-hidden="true"></span>
+    <span class="kb-sr-only">{label}</span>
+    {title && <span class="plate-title">{title}</span>}
+    {
+      id && (
+        <a class="plate-anchor" href={`#${id}`} aria-label={`${label}へのリンク`}>
+          #
+        </a>
+      )
+    }
+  </p>
+  <div class="plate-body"><slot /></div>
+</div>

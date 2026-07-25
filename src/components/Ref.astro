@@ -1,0 +1,13 @@
+---
+// Ref — 主張への参照。番号ではなく種別＋タイトルで指す。
+//
+// 番号は CSS counter なので build 時には確定しておらず、参照側から番号を刷れない。
+// 番号がズレたリンクを出すより、意味で指すほうが壊れない（参照サイトの refer も
+// title があれば title を出す実装になっている）。
+interface Props {
+  href: string;
+}
+const { href } = Astro.props;
+---
+
+<a class="kb-ref" href={href}><slot /></a>

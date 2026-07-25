@@ -1,36 +1,15 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# build output
+dist/
+.astro/
 
-# dependencies
-/node_modules
-/.pnp
-.pnp.js
+# deps
+node_modules/
 
-# testing
-/coverage
-
-# next.js
-/.next/
-/out/
-
-# production
-/build
+# TikZ のコンパイル結果キャッシュ（内容ハッシュ。消しても再生成される）
+.cache/
 
 # misc
 .DS_Store
-*.pem
-
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.pnpm-debug.log*
-
-# local env files
-.env*.local
-
-# vercel
-.vercel
-
-# typescript
-*.tsbuildinfo
-next-env.d.ts
+*.log
+.env
+.env.production

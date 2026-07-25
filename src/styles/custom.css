@@ -1,0 +1,297 @@
+/* ------------------------------------------------------------------
+ * snowyuki31 — 公開ナレッジベースの見た目
+ *
+ * 方針: ページの主役は「主張のプレート」と「図」。それ以外は徹底して静かにする。
+ * 数式は KaTeX の Computer Modern、和文は明朝、ラベル・UI はゴシック。
+ * 図（TikZ）は黒の線画なので、地はほぼモノクロに保ち、色はアクセント 1 色だけに使う。
+ * ------------------------------------------------------------------ */
+
+/* --- tokens ------------------------------------------------------- */
+
+:root {
+	--kb-font-body: 'Shippori Mincho B1', 'Hiragino Mincho ProN', 'Yu Mincho', serif;
+	--kb-font-ui: 'Zen Kaku Gothic New', 'Hiragino Sans', 'Noto Sans JP', system-ui, sans-serif;
+
+	--sl-font: var(--kb-font-ui);
+	--sl-content-width: 42rem;
+
+	/* dark（Starlight は :root がダーク） */
+	--sl-color-bg: #0e1116;
+	--sl-color-bg-nav: #0e1116;
+	--sl-color-bg-sidebar: #0e1116;
+	--sl-color-text: #e4e8f0;
+	--sl-color-white: #f2f5fa;
+	--sl-color-accent: #6ed0d8;
+	--sl-color-accent-low: #10333a;
+	--sl-color-accent-high: #b6e9ee;
+	--sl-color-text-accent: #6ed0d8;
+	--sl-color-hairline: #232a35;
+	--sl-color-hairline-light: #2a313d;
+
+	--kb-rule: #2f3743;
+	--kb-ink-soft: #98a1b3;
+}
+
+:root[data-theme='light'] {
+	/* 紙は暖色のクリームではなく、わずかに青を含んだ白（雪の側） */
+	--sl-color-bg: #f6f7f9;
+	--sl-color-bg-nav: #f6f7f9;
+	--sl-color-bg-sidebar: #f6f7f9;
+	--sl-color-text: #151922;
+	--sl-color-black: #151922;
+	--sl-color-accent: #0b6e75;
+	--sl-color-accent-low: #d7ebed;
+	--sl-color-accent-high: #084a4f;
+	--sl-color-text-accent: #0b6e75;
+	--sl-color-hairline: #dfe3ea;
+	--sl-color-hairline-light: #e7eaf0;
+
+	--kb-rule: #c3cad6;
+	--kb-ink-soft: #5a6273;
+}
+
+/* --- typography --------------------------------------------------- */
+
+/* 本文だけ明朝。サイドバー・ヘッダ等の UI はゴシックのまま（--sl-font） */
+.sl-markdown-content {
+	font-family: var(--kb-font-body);
+	line-height: 1.95;
+	letter-spacing: 0.01em;
+}
+
+.sl-markdown-content :is(h1, h2, h3, h4, h5, h6),
+.content-panel h1 {
+	font-family: var(--kb-font-ui);
+	letter-spacing: 0.02em;
+	line-height: 1.5;
+}
+
+/* 節の切れ目を細い罫で示す。装飾ではなく構造の可視化 */
+.sl-markdown-content h2 {
+	margin-top: 3rem;
+	padding-top: 1.6rem;
+	border-top: 1px solid var(--kb-rule);
+}
+
+.sl-markdown-content a {
+	text-underline-offset: 0.18em;
+}
+
+/* 数式は明朝より少しだけ大きくすると釣り合う */
+.katex {
+	font-size: 1.06em;
+}
+
+/* 長い数式はスマホで折り返せないので、その行だけ横スクロールさせる */
+.katex-display {
+	padding: 0.3rem 0;
+	overflow-x: auto;
+	overflow-y: hidden;
+}
+
+/* --- plate（定義・命題・定理…） ------------------------------------ */
+
+/* 種別をまたいだ 1 本の通し番号。ページ単位で reset する */
+.sl-markdown-content {
+	counter-reset: env;
+}
+
+.plate {
+	counter-increment: env;
+	position: relative;
+	margin: 2.4rem 0;
+	padding: 1.7rem 1.4rem 1.2rem;
+	border: 1px solid var(--kb-rule);
+	border-radius: 1px;
+}
+
+/* ラベルは上の罫線に落とし込む（罫を切り欠いてそこに置く） */
+.plate-head {
+	position: absolute;
+	top: 0;
+	left: 1.1rem;
+	transform: translateY(-50%);
+	display: flex;
+	align-items: baseline;
+	gap: 0.5rem;
+	max-width: calc(100% - 2.2rem);
+	margin: 0;
+	padding-inline: 0.55rem;
+	background: var(--sl-color-bg);
+	font-family: var(--kb-font-ui);
+	font-size: 0.82rem;
+	line-height: 1;
+	white-space: nowrap;
+}
+
+.plate-label {
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	color: var(--sl-color-text-accent);
+}
+
+.plate-label::before {
+	content: var(--plate-kind, '命題') var(--plate-section, '') counter(env);
+}
+
+.plate-title {
+	overflow: hidden;
+	color: var(--kb-ink-soft);
+	font-weight: 500;
+	text-overflow: ellipsis;
+}
+
+.plate-title::before {
+	content: '–';
+	margin-right: 0.5rem;
+	opacity: 0.55;
+}
+
+/* 主張はすべて固有の番地を持つ = 引用できる、という建て付け */
+.plate-anchor {
+	color: var(--kb-ink-soft);
+	text-decoration: none;
+	opacity: 0;
+	transition: opacity 0.15s ease;
+}
+
+.plate:hover .plate-anchor,
+.plate-anchor:focus-visible {
+	opacity: 1;
+	color: var(--sl-color-text-accent);
+}
+
+/* hover のないデバイスでは常に見せる */
+@media (hover: none) {
+	.plate-anchor {
+		opacity: 0.55;
+	}
+}
+
+.plate-body > :first-child {
+	margin-top: 0;
+}
+
+.plate-body > :last-child {
+	margin-bottom: 0;
+}
+
+/* 幅が足りない時は切り欠きをやめ、箱の中の見出しに切り替える（長いタイトルで崩さない） */
+@media (max-width: 30rem) {
+	.plate {
+		padding-top: 1.1rem;
+	}
+
+	.plate-head {
+		position: static;
+		max-width: none;
+		margin-bottom: 0.7rem;
+		padding-inline: 0;
+		transform: none;
+		background: none;
+		white-space: normal;
+		flex-wrap: wrap;
+	}
+}
+
+/* --- proof -------------------------------------------------------- */
+
+.proof {
+	margin: 1.6rem 0;
+	padding-left: 1.1rem;
+	border-left: 2px solid var(--kb-rule);
+}
+
+.proof-summary {
+	list-style: none;
+	color: var(--kb-ink-soft);
+	font-family: var(--kb-font-ui);
+	font-size: 0.85rem;
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	cursor: pointer;
+}
+
+.proof-summary::-webkit-details-marker {
+	display: none;
+}
+
+.proof-summary::before {
+	content: '▸';
+	display: inline-block;
+	margin-right: 0.5em;
+	transition: transform 0.15s ease;
+}
+
+.proof[open] .proof-summary::before {
+	transform: rotate(90deg);
+}
+
+.proof-body {
+	margin-top: 0.8rem;
+}
+
+/* 証明の終わりに □ */
+.proof-body > :last-child::after {
+	content: '　□';
+}
+
+/* --- tikz --------------------------------------------------------- */
+
+.tikz {
+	margin: 2rem 0;
+	overflow-x: auto;
+	text-align: center;
+}
+
+.tikz svg {
+	max-width: 100%;
+	height: auto;
+}
+
+/* 図は黒の線画で出てくるので、暗い地では反転させる */
+:root:not([data-theme='light']) .tikz svg {
+	filter: invert(1) hue-rotate(180deg);
+}
+
+.tikz--error {
+	padding: 1rem;
+	border: 1px dashed #d9534f;
+	text-align: left;
+}
+
+.tikz--error pre {
+	font-size: 0.8rem;
+	white-space: pre-wrap;
+}
+
+/* --- misc --------------------------------------------------------- */
+
+.kb-ref {
+	font-family: var(--kb-font-ui);
+	font-size: 0.95em;
+}
+
+.kb-sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	white-space: nowrap;
+	border: 0;
+	clip: rect(0 0 0 0);
+}
+
+:focus-visible {
+	outline: 2px solid var(--sl-color-text-accent);
+	outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.plate-anchor,
+	.proof-summary::before {
+		transition: none;
+	}
+}

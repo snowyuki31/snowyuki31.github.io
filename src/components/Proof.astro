@@ -1,0 +1,15 @@
+---
+// Proof — 証明。既定は畳んだ状態。
+// 参照サイト（topos-theory）が証明を details に入れているのと同じ判断で、
+// 「主張を拾い読みする」導線を壊さないようにしている。
+interface Props {
+  title?: string;
+  open?: boolean;
+}
+const { title = '証明', open = false } = Astro.props;
+---
+
+<details class="proof" open={open}>
+  <summary class="proof-summary">{title}</summary>
+  <div class="proof-body"><slot /></div>
+</details>
