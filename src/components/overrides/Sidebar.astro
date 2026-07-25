@@ -2,7 +2,7 @@
 // Sidebar override — 左サイドバー = 全ノートの Index（入れ子ツリー）。
 // 階層は各ページの <Moc> ブロック内のリンクから導出する（Home > 圏論 > モノイド）。
 // header は 2 カラム以上で消すので、左上が Home へのリンク（wordmark）になる。
-import { indexTree } from '../../../plugins/hierarchy.mjs';
+import { indexTree, ancestorsAndSelf } from '../../../plugins/hierarchy.mjs';
 import TreeItem from '../TreeItem.astro';
 
 const route = (Astro.locals as any)?.starlightRoute;
@@ -10,13 +10,14 @@ const raw: string = route?.id ?? route?.entry?.id ?? '';
 const slug = raw === 'index' ? '' : raw.replace(/\/index$/, '');
 
 const tree = indexTree();
+const open = ancestorsAndSelf(slug);
 ---
 
 <div class="kb-side">
   <a class="kb-wordmark" href="/">snowyuki31</a>
   <nav class="kb-tree" aria-label="Index">
     <ul>
-      {tree.map((n) => <TreeItem node={n} current={slug} />)}
+      {tree.map((n) => <TreeItem node={n} current={slug} open={open} />)}
     </ul>
   </nav>
 </div>
