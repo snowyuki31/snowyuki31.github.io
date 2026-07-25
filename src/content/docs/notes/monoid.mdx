@@ -9,14 +9,26 @@ import { Definition, Example } from '@components/env';
 **モノイド**とは、対象が 1 つの [[圏]] をいう。
 </Definition>
 
+同じモノイドは 2 通りに描ける。左は**対象が 1 つ**であることを強調した図で、すべての射が
+$\ast$ のループになる。右は**射が複数あって合成される**ことを強調した図で、同じ $\ast$ を
+並べて展開したもの。
+
 ```tikz
 \begin{document}
 \begin{tikzpicture}
+% 左: 対象が 1 つであること
 \node[draw, circle, minimum size=12mm] (M) at (0,0) {$\ast$};
 \draw[->,loop above] (M) to node[above] {$1_{\ast}$} (M);
 \draw[->,loop left] (M) to node[left] {$m$} (M);
-\draw[->,loop right] (M) to node[right] {$m'$} (M);
-\draw[->,loop below] (M) to node[below] {$\ldots$} (M);
+\draw[->,loop below] (M) to node[below] {$m'$} (M);
+% 右: 射が複数あって合成されること（同じ ∗ を展開して並べる）
+\node (A) at (4.2,0) {$\ast$};
+\node (B) at (6.7,0) {$\ast$};
+\node (C) at (9.2,0) {$\ast$};
+\draw[->,loop above] (A) to node[above] {$1_{\ast}$} (A);
+\draw[->] (A) to node[above] {$m$} (B);
+\draw[->] (B) to node[above] {$m'$} (C);
+\draw[->] (A) to[bend right=35] node[below] {$m \cdot m'$} (C);
 \end{tikzpicture}
 \end{document}
 ```
@@ -63,7 +75,7 @@ $\mathtt{abcba} = \mathtt{abc} \mathbin{+\!\!+} \mathtt{ba}$。
 
 
 <Example title="最大公約数" id="ex-gcd">
-$(\mathbb{N}, \gcd, 0)$ はモノイドになる。**単位元は $0$** である。
+$(\mathbb{N}, \gcd, 0)$ はモノイドになる。
 この場合、自然数は0を含み、$\gcd(n, 0) = n$ が成り立つとする。
 </Example>
 
@@ -80,5 +92,3 @@ $5$ と合成すると $\gcd(2, 5) = 1$（互いに素）まで潰れる。
 \end{document}
 ```
 
-整除関係 $m \mid n$ を順序と見ると、$\gcd$ は 2 数の最大下界（meet）であり、
-単位元 $0$ はこの順序の最大元にあたる。
