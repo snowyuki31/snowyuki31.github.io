@@ -27,6 +27,11 @@
 	/* mobile TOC は描画しないので、その分の予約 padding を消す */
 	--sl-mobile-toc-height: 0rem;
 
+	/* 見出しは控えめに（本文の従属物であって章扉ではない） */
+	--sl-text-h2: 1.3rem;
+	--sl-text-h3: 1.1rem;
+	--sl-text-h4: 1rem;
+
 	--sl-color-bg: #fff;
 	--sl-color-bg-nav: #fff;
 	--sl-color-bg-sidebar: #fff;

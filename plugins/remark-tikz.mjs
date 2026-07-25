@@ -86,8 +86,21 @@ async function compileCached(source) {
   return svg;
 }
 
+// TikZ の素の出力は小さめなので、表示は定率で拡大する（ベクタなので劣化しない）。
+// ルート <svg> の width/height だけ触り、viewBox は変えない。キャッシュには適用前の svg が載る。
+const DISPLAY_SCALE = 1.6;
+
+function scaleSvg(svg) {
+  return svg.replace(/<svg\b[^>]*>/, (tag) =>
+    tag.replace(
+      /(width|height)="([\d.]+)([a-z%]*)"/g,
+      (_, attr, num, unit) => `${attr}="${(parseFloat(num) * DISPLAY_SCALE).toFixed(2)}${unit}"`,
+    ),
+  );
+}
+
 function clean(svg) {
-  return svg.replace(/<\?xml[^>]*\?>/g, '').replace(/<!DOCTYPE[^>]*>/g, '').trim();
+  return scaleSvg(svg.replace(/<\?xml[^>]*\?>/g, '').replace(/<!DOCTYPE[^>]*>/g, '').trim());
 }
 
 function escapeHtml(s) {
