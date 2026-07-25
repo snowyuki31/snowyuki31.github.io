@@ -33,7 +33,6 @@ $\cdot \colon M \times M \to M$、および単位元 $1_M \in M$
 例: 自然数と加法 $(\mathbb{N}, +, 0)$、文字列と連接 $(\Sigma^{*}, {+\!\!+}, \varepsilon)$、
 最大公約数 $(\mathbb{N}, \gcd, 0)$。
 
-## 例: 文字列と連接
 
 <Example title="文字列と連接" id="ex-strings">
 アルファベット $\Sigma$ 上の文字列全体 $\Sigma^{*}$ は、連接 ${+\!\!+}$ を積、
@@ -44,13 +43,16 @@ $\cdot \colon M \times M \to M$、および単位元 $1_M \in M$
 $\mathtt{abc} = \mathtt{ab} \mathbin{+\!\!+} \mathtt{c}$ になる。
 </Example>
 
-同じ対象 $\ast$ を 3 回描くと、圏の合成の図式がそのまま連接の図になる。
+同じ対象 $\ast$ を並べて描くと、圏の合成の図式がそのまま連接の図になる。
+合成を重ねるたびに文字列が伸びていく:
+$\mathtt{abc} = \mathtt{ab} \mathbin{+\!\!+} \mathtt{c}$、
+$\mathtt{abcba} = \mathtt{abc} \mathbin{+\!\!+} \mathtt{ba}$。
 
 ```tikz
 \usepackage{tikz-cd}
 \begin{document}
-\begin{tikzcd}[column sep=huge]
-\ast \arrow[r, "\mathtt{ab}"] \arrow[rr, bend right=40, "\mathtt{abc}"'] & \ast \arrow[r, "\mathtt{c}"] & \ast
+\begin{tikzcd}[column sep=large]
+\ast \arrow[r, "\mathtt{ab}"] \arrow[rr, bend right=30, "\mathtt{abc}"'] \arrow[rrr, bend right=50, "\mathtt{abcba}"'] & \ast \arrow[r, "\mathtt{c}"] & \ast \arrow[r, "\mathtt{ba}"] & \ast
 \end{tikzcd}
 \end{document}
 ```
@@ -59,24 +61,20 @@ $\mathtt{abc} = \mathtt{ab} \mathbin{+\!\!+} \mathtt{c}$ になる。
 単位律にあたる。連接の結合律 $(\mathtt{a} \mathbin{+\!\!+} \mathtt{b}) \mathbin{+\!\!+} \mathtt{c} = \mathtt{a} \mathbin{+\!\!+} (\mathtt{b} \mathbin{+\!\!+} \mathtt{c})$ は、
 圏の合成の結合律そのものである。
 
-## 例: 最大公約数
 
 <Example title="最大公約数" id="ex-gcd">
 $(\mathbb{N}, \gcd, 0)$ はモノイドになる。**単位元は $0$** である。
-$0$ はすべての数の倍数なので、約数としては最強であり、$\gcd(n, 0) = n$ が成り立つ。
-
-積が「継ぎ足す」操作とは限らない例で、$\gcd(n, n) = n$（冪等）のように
-同じ射を 2 回合成しても変わらない圏になっている。
+この場合、自然数は0を含み、$\gcd(n, 0) = n$ が成り立つとする。
 </Example>
 
 合成の図式は連接とまったく同じ形だが、今度は積が「潰す」向きに働く。
-$12$ と $18$ の合成は $\gcd(12, 18) = 6$ になる。
+$12$ と $18$ の合成は $\gcd(12, 18) = 6$、さらに $8$ と合成すると $\gcd(6, 8) = 2$ になる。
 
 ```tikz
 \usepackage{tikz-cd}
 \begin{document}
-\begin{tikzcd}[column sep=huge]
-\ast \arrow[r, "12"] \arrow[rr, bend right=40, "6"'] & \ast \arrow[r, "18"] & \ast
+\begin{tikzcd}[column sep=large]
+\ast \arrow[r, "12"] \arrow[rr, bend right=30, "6"'] \arrow[rrr, bend right=50, "2"'] & \ast \arrow[r, "18"] & \ast \arrow[r, "8"] & \ast
 \end{tikzcd}
 \end{document}
 ```
