@@ -1,17 +1,26 @@
 ---
 title: モノイド
-description: 集合・結合的な積・単位元からなる代数構造。
+description: 対象が 1 つの圏。展開すると集合・結合的な積・単位元からなる代数構造。
 ---
 
 import { Definition, Moc } from '@components/env';
 
 <Definition title="モノイド" id="def-monoid">
+**モノイド**とは、対象が 1 つの [[圏]] をいう。
+</Definition>
+
+唯一の対象を $\ast$ とすると、モノイドの実体は射の集まり $M := \mathcal{C}(\ast, \ast)$ と、
+その合成 $\cdot$、恒等射 $1_M$ である。これを展開したものが古典的な定義になる。
+
+<Definition title="モノイド（古典的定義）" id="def-monoid-classical">
 **モノイド** $(M, \cdot, 1_M)$ とは、集合 $M$、結合的な二項演算
 $\cdot \colon M \times M \to M$、および単位元 $1_M \in M$
 （任意の $m \in M$ について $1_M \cdot m = m = m \cdot 1_M$）の組をいう。
 </Definition>
 
 例: 自然数と加法 $(\mathbb{N}, +, 0)$、文字列と連接 $(\Sigma^{*}, {+\!\!+}, \varepsilon)$。
+
+2 つの定義が一致することは [[モノイドは対象が1つの圏]] で確かめる。
 
 <Moc kind="set">
 
