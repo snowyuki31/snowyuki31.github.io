@@ -1,0 +1,8 @@
+---
+// PageTitle override — タイトルの上にパンくず（全系統）を出す。
+import Default from '@astrojs/starlight/components/PageTitle.astro';
+import Breadcrumbs from '../Breadcrumbs.astro';
+---
+
+<Breadcrumbs />
+<Default><slot /></Default>

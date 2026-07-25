@@ -13,6 +13,10 @@ const DOCS_DIR = path.resolve('src/content/docs');
 
 export const WIKILINK_RE = /\[\[([^\]|#]+)(#[^\]|]*)?(\|[^\]]*)?\]\]/g;
 
+// <Moc>（目録ブロック）。この中の wikilink だけが階層の辺（親子）になる。
+// 本文中の wikilink は横のつながり（言及）で、階層に影響しない。
+export const MOC_RE = /<Moc\b([^>]*)>([\s\S]*?)<\/Moc>/g;
+
 /** 'notes/category.mdx' → slug 'notes/category'（index は親ディレクトリに畳む） */
 function toSlug(relPath) {
   let slug = relPath.replace(/\.(md|mdx)$/, '');
@@ -39,8 +43,9 @@ function* walk(dir) {
 
 /**
  * 全ノートを走査する。
- * @returns {{ byTitle: Map<string, {slug: string, title: string}>,
- *             notes: {slug: string, title: string, outTitles: string[]}[] }}
+ * @returns {{ byTitle: Map<string, object>,
+ *             notes: {slug: string, title: string, outTitles: string[],
+ *                     proseTitles: string[], mocTitles: string[], isMoc: boolean}[] }}
  */
 export function scanNotes() {
   const byTitle = new Map();
@@ -50,8 +55,18 @@ export function scanNotes() {
     const relPath = path.relative(DOCS_DIR, file);
     const slug = toSlug(relPath);
     const title = frontmatterTitle(source) ?? slug;
-    const outTitles = [...source.matchAll(WIKILINK_RE)].map((m) => m[1].trim());
-    const note = { slug, title, outTitles };
+    const titlesIn = (text) => [...text.matchAll(WIKILINK_RE)].map((m) => m[1].trim());
+    const mocBodies = [...source.matchAll(MOC_RE)].map((m) => m[2]);
+    const note = {
+      slug,
+      title,
+      outTitles: titlesIn(source),
+      // 本文（Moc 外）の言及。backlinks はこちらを使う
+      proseTitles: titlesIn(source.replace(MOC_RE, '')),
+      // 目録に載っているノート = このページの子
+      mocTitles: [...new Set(mocBodies.flatMap(titlesIn))],
+      isMoc: mocBodies.length > 0,
+    };
     notes.push(note);
     byTitle.set(title, note);
   }
@@ -66,18 +81,12 @@ export function resolveTitle(byTitle, title) {
 }
 
 /**
- * slug のノートへリンクしている全ノート（backlinks）。
- * MoC（moc/ 配下）とそれ以外を分けて返す。
+ * slug のノートを本文中（Moc 外）で言及しているノート（backlinks）。
+ * 目録経由の所属はパンくず（階層）が示すので、ここには含めない。
  */
 export function backlinksFor(slug) {
   const { byTitle, notes } = scanNotes();
-  const target = notes.find((n) => n.slug === slug);
-  if (!target) return { mocs: [], notes: [] };
-  const linking = notes.filter(
-    (n) => n.slug !== slug && n.outTitles.some((t) => byTitle.get(t)?.slug === slug),
+  return notes.filter(
+    (n) => n.slug !== slug && n.proseTitles.some((t) => byTitle.get(t)?.slug === slug),
   );
-  return {
-    mocs: linking.filter((n) => n.slug.startsWith('moc/')),
-    notes: linking.filter((n) => !n.slug.startsWith('moc/')),
-  };
 }

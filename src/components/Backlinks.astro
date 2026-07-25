@@ -1,36 +1,28 @@
 ---
-// Backlinks — このノートへ [[リンク]] している他のノートの一覧（Obsidian の linked mentions 相当）。
-// MoC からの被リンクは「このノートを含む MoC = 上位 index」なので分けて出す。
+// Backlinks — このノートを本文中で言及しているノート（Obsidian の linked mentions 相当）。
+// 目録（Moc）経由の所属はパンくずが示すので、ここに出すのは本文の横リンクだけ。
 import { backlinksFor } from '../../plugins/wikilinks.mjs';
 
 const route = (Astro.locals as any)?.starlightRoute;
 const raw: string = route?.id ?? route?.entry?.id ?? '';
 const slug = raw === 'index' ? '' : raw.replace(/\/index$/, '');
 
-const { mocs, notes } = backlinksFor(slug);
-const groups = [
-  { label: 'Map of Contents', items: mocs },
-  { label: 'リンクしているノート', items: notes },
-].filter((g) => g.items.length > 0);
+const linking = backlinksFor(slug);
 ---
 
 {
-  groups.length > 0 && (
+  linking.length > 0 && (
     <aside class="backlinks" aria-label="このノートへのリンク">
-      {groups.map((g) => (
-        <section>
-          <h2>{g.label}</h2>
-          <ul>
-            {g.items.map((n) => (
-              <li>
-                <a class="wikilink" href={n.slug === '' ? '/' : `/${n.slug}/`}>
-                  {n.title}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </section>
-      ))}
+      <h2>リンクしているノート</h2>
+      <ul>
+        {linking.map((n) => (
+          <li>
+            <a class="wikilink" href={n.slug === '' ? '/' : `/${n.slug}/`}>
+              {n.title}
+            </a>
+          </li>
+        ))}
+      </ul>
     </aside>
   )
 }

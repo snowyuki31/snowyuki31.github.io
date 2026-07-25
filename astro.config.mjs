@@ -6,6 +6,8 @@ import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import { remarkTikz } from './plugins/remark-tikz.mjs';
 import { remarkWikilink } from './plugins/remark-wikilink.mjs';
+import { remarkMoc } from './plugins/remark-moc.mjs';
+import { mocSidebar } from './plugins/hierarchy.mjs';
 
 // 和文はシステムのゴシック体に任せ、欧文だけ Roboto を当てる
 // （参照: nineties.github.io/topos-theory と同じ構成）
@@ -17,9 +19,10 @@ export default defineConfig({
 
   markdown: {
     processor: unified({
+      // remarkMoc は <Moc> 目録ブロックから図式を生成し、
       // remarkWikilink は [[タイトル]] をノートへのリンクに、
       // remarkTikz は ```tikz を build 時に SVG へコンパイルする（client JS ゼロ）
-      remarkPlugins: [remarkWikilink, remarkMath, remarkTikz],
+      remarkPlugins: [remarkMoc, remarkWikilink, remarkMath, remarkTikz],
       rehypePlugins: [[rehypeKatex, { strict: false, throwOnError: false }]],
     }),
   },
@@ -49,6 +52,8 @@ export default defineConfig({
         // トンマナは白黒 1 種のみ。テーマ切り替えを廃止する
         ThemeProvider: './src/components/overrides/ThemeProvider.astro',
         ThemeSelect: './src/components/overrides/ThemeSelect.astro',
+        // タイトル上にパンくず（全系統）
+        PageTitle: './src/components/overrides/PageTitle.astro',
         // ノート末尾に backlinks（linked mentions）を出す
         Footer: './src/components/overrides/Footer.astro',
       },
@@ -59,10 +64,9 @@ export default defineConfig({
         baseUrl: 'https://github.com/snowyuki31/snowyuki31.github.io/edit/main/',
       },
       lastUpdated: true,
-      sidebar: [
-        { label: 'Map of Contents', items: [{ autogenerate: { directory: 'moc' } }] },
-        { label: 'Notes', items: [{ autogenerate: { directory: 'notes' } }] },
-      ],
+      // MoC（目録を持つノート）だけの階層ツリー。Moc の辺から config 読込時に導出する
+      // （構造を変えたら dev サーバの再起動が要る。ページ内容の変更は再起動不要）
+      sidebar: mocSidebar(),
     }),
   ],
 });

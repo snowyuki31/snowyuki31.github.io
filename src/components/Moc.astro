@@ -1,0 +1,11 @@
+---
+// Moc — 目録ブロック。このブロック内の [[wikilink]] が階層の辺（このページの子）になる。
+// 図式は remark-moc が build 時に生成してこのブロックの直前へ差し込む。
+// ここでは著者が書いた目録（注釈つきリストなど）をそのまま描画するだけ。
+// kind="graph" の中身は辺 DSL なので remark-moc が空にする（:empty で消える）。
+interface Props {
+  kind?: 'sequence' | 'grouping' | 'graph';
+}
+---
+
+<nav class="moc" aria-label="目録"><slot /></nav>

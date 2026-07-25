@@ -1,0 +1,47 @@
+---
+// Breadcrumbs — 現在位置。属する全系統（Home → … → 自分）を 1 系統 1 行で出す。
+// 多親（複数の MoC に属する）ならその数だけ行が並ぶ。
+// 階層は <Moc> ブロックの辺から導出される（plugins/hierarchy.mjs）。
+import { trailsFor, validateHierarchy } from '../../plugins/hierarchy.mjs';
+
+const route = (Astro.locals as any)?.starlightRoute;
+const raw: string = route?.id ?? route?.entry?.id ?? '';
+const slug = raw === 'index' ? '' : raw.replace(/\/index$/, '');
+
+let trails: { slug: string; title: string }[][] = [];
+if (slug !== '') {
+  trails = trailsFor(slug);
+  // 壊れた構造（Home から辿れないページ）を公開しない。全ページがここを通るので確実に捕まる
+  if (import.meta.env.PROD) {
+    const orphans = validateHierarchy();
+    if (orphans.length > 0) {
+      throw new Error(`どの Moc からも辿れないページがあります: ${orphans.join(', ')}`);
+    }
+  }
+}
+---
+
+{
+  slug !== '' && (
+    <nav class="breadcrumbs" aria-label="現在位置">
+      {trails.length > 0 ? (
+        trails.map((t) => (
+          <p>
+            {t.map((c, i) => (
+              <Fragment>
+                {i > 0 && <span class="breadcrumbs-sep" aria-hidden="true">{'>'}</span>}
+                {i < t.length - 1 ? (
+                  <a href={c.slug === '' ? '/' : `/${c.slug}/`}>{c.title}</a>
+                ) : (
+                  <span aria-current="page">{c.title}</span>
+                )}
+              </Fragment>
+            ))}
+          </p>
+        ))
+      ) : (
+        <p class="breadcrumbs--orphan">（未整理 — どの Moc にも載っていない）</p>
+      )}
+    </nav>
+  )
+}

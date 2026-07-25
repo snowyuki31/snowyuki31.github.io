@@ -231,6 +231,128 @@
 	white-space: pre-wrap;
 }
 
+/* --- breadcrumbs（現在位置。多親なら全系統） ------------------------ */
+
+.breadcrumbs {
+	margin-bottom: 0.6rem;
+	font-size: 0.8rem;
+	color: var(--kb-gray-700);
+}
+
+.breadcrumbs p {
+	margin: 0.15rem 0;
+	line-height: 1.6;
+}
+
+.breadcrumbs a {
+	color: var(--kb-gray-700);
+	text-decoration: none;
+}
+
+.breadcrumbs a:hover {
+	color: #000;
+	text-decoration: underline;
+}
+
+.breadcrumbs [aria-current='page'] {
+	color: #000;
+}
+
+.breadcrumbs-sep {
+	margin: 0 0.4em;
+	color: var(--kb-gray-500);
+}
+
+.breadcrumbs--orphan {
+	color: var(--kb-gray-500);
+}
+
+/* --- moc（目録と図式） --------------------------------------------- */
+
+.moc:empty {
+	display: none;
+}
+
+.moc-diagram {
+	margin: 1.2rem 0;
+	overflow-x: auto;
+}
+
+/* ノード。MoC ノート（それ自体が目録を持つ）は二重枠 = 潜れるノード */
+.moc-node {
+	display: inline-block;
+	padding: 0.3rem 0.7rem;
+	border: 1px solid #000;
+	background: #fff;
+	color: #000;
+	font-size: 0.9rem;
+	line-height: 1.5;
+	text-decoration: none;
+	white-space: nowrap;
+}
+
+.moc-node:hover {
+	background: var(--kb-gray-100);
+}
+
+.moc-node--moc {
+	outline: 1px solid #000;
+	outline-offset: 2px;
+}
+
+.moc-node--broken {
+	border-style: dashed;
+	color: var(--kb-gray-500);
+}
+
+/* sequence: 鎖 */
+.moc-diagram--sequence {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.65rem;
+	padding: 4px;
+}
+
+.moc-arrow {
+	color: #000;
+}
+
+/* grouping: 束 */
+.moc-diagram--grouping {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: stretch;
+	gap: 0.9rem;
+	padding: 4px;
+}
+
+.moc-cluster {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.65rem;
+	padding: 0.6rem 0.8rem;
+	border: 1px dashed var(--kb-gray-500);
+}
+
+.moc-cluster-label {
+	font-size: 0.75rem;
+	font-weight: 700;
+}
+
+/* graph: SVG（build 時レイアウト） */
+.moc-diagram--graph svg {
+	display: block;
+	max-width: 100%;
+	height: auto;
+	margin-inline: auto;
+}
+
+.moc-diagram--graph a:hover rect:first-of-type {
+	fill: var(--kb-gray-100);
+}
+
 /* --- backlinks（linked mentions） ---------------------------------- */
 
 .backlinks {
