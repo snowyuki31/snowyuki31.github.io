@@ -16,18 +16,21 @@ $\ast$ のループになる。右は**射が複数あって合成される**こ
 ```tikz
 \begin{document}
 \begin{tikzpicture}
-% 左: 対象が 1 つであること
+% 左: 対象が 1 つであること（射は他にもたくさんある）
 \node[draw, circle, minimum size=12mm] (M) at (0,0) {$\ast$};
 \draw[->,loop above] (M) to node[above] {$1_{\ast}$} (M);
 \draw[->,loop left] (M) to node[left] {$m$} (M);
-\draw[->,loop below] (M) to node[below] {$m'$} (M);
-% 右: 射が複数あって合成されること（同じ ∗ を展開して並べる）
-\node (A) at (4.2,0) {$\ast$};
-\node (B) at (6.7,0) {$\ast$};
-\node (C) at (9.2,0) {$\ast$};
+\draw[->,loop right] (M) to node[right] {$m'$} (M);
+\draw[->,loop below] (M) to node[below] {$\ldots$} (M);
+% 右: 射が複数あって合成されること（同じ ∗ を展開して並べる。鎖はいくらでも続く）
+\node (A) at (4.9,0) {$\ast$};
+\node (B) at (7.4,0) {$\ast$};
+\node (C) at (9.9,0) {$\ast$};
+\node (D) at (11.9,0) {$\cdots$};
 \draw[->,loop above] (A) to node[above] {$1_{\ast}$} (A);
 \draw[->] (A) to node[above] {$m$} (B);
 \draw[->] (B) to node[above] {$m'$} (C);
+\draw[->] (C) to node[above] {$m''$} (D);
 \draw[->] (A) to[bend right=35] node[below] {$m \cdot m'$} (C);
 \end{tikzpicture}
 \end{document}
