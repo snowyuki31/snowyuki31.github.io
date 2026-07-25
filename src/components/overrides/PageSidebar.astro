@@ -13,7 +13,7 @@ const contexts = slug === '' ? [] : contextMocsFor(slug);
 
 {
   contexts.length > 0 && (
-    <div class="kb-context">
+    <div class="kb-context sl-hidden lg:sl-block">
       <h2 class="kb-context-title">このノートの位置</h2>
       {contexts.map((c) => (
         <section>

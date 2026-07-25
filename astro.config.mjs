@@ -59,8 +59,6 @@ export default defineConfig({
         Sidebar: './src/components/overrides/Sidebar.astro',
         // 右: 目次の代わりに「このノートが属する MoC の図式」
         PageSidebar: './src/components/overrides/PageSidebar.astro',
-        // 1 カラム時の header は snowyuki31 だけ（ハンバーガーなし）
-        MobileMenuToggle: './src/components/overrides/MobileMenuToggle.astro',
         // ノート末尾に backlinks（linked mentions）を出す
         Footer: './src/components/overrides/Footer.astro',
       },

@@ -19,7 +19,13 @@
 
 	--sl-font: 'Roboto', sans-serif;
 	--sl-font-mono: 'Roboto Mono', monospace;
-	--sl-content-width: 42rem;
+
+	/* 左サイドバーは細く、本文は残り幅いっぱいに使う */
+	--sl-sidebar-width: 14rem;
+	--sl-content-width: 100%;
+
+	/* mobile TOC は描画しないので、その分の予約 padding を消す */
+	--sl-mobile-toc-height: 0rem;
 
 	--sl-color-bg: #fff;
 	--sl-color-bg-nav: #fff;
@@ -258,6 +264,13 @@
 	text-decoration: underline;
 }
 
+/* 1 カラム時はドロワー内。header に wordmark が出るので重複させない */
+@media (max-width: 49.999rem) {
+	.kb-wordmark {
+		display: none;
+	}
+}
+
 /* 左: MoC ツリー。親（開閉できる行）もリンク、開閉は caret で行う */
 .kb-tree {
 	font-size: 0.9rem;
@@ -317,7 +330,12 @@
 	transform: rotate(90deg);
 }
 
-/* 右: このノートが属する MoC の図式（目次の代わり） */
+/* 右: このノートが属する MoC の図式（目次の代わり）。
+   デフォルト PageSidebar の right-sidebar-panel が持っていた padding を引き継ぐ */
+.kb-context {
+	padding: 1.2rem var(--sl-sidebar-pad-x) 2rem;
+}
+
 .kb-context-title {
 	margin: 0 0 0.7rem;
 	color: var(--kb-gray-700);
