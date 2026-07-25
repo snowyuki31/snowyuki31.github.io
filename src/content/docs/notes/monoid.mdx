@@ -32,11 +32,28 @@ $\cdot \colon M \times M \to M$、および単位元 $1_M \in M$
 
 例: 自然数と加法 $(\mathbb{N}, +, 0)$、文字列と連接 $(\Sigma^{*}, {+\!\!+}, \varepsilon)$。
 
-<Example title="2 つの定義の一致" id="ex-monoid">
-対象を $\ast$ ただ 1 つとし、$\mathcal{C}(\ast, \ast)$ をモノイド $(M, \cdot, 1_M)$ の元全体とする。
-射の合成を $\cdot$、恒等射を $1_M$ とすれば、モノイドにおける結合律と単位律はそのまま圏の公理になる。
+## 例: 文字列と連接
 
-逆に対象 1 つの圏 $\mathcal{C}$ から $M := \mathcal{C}(\ast, \ast)$ を取ると、$M$ はモノイドになる。
+<Example title="文字列と連接" id="ex-strings">
+アルファベット $\Sigma$ 上の文字列全体 $\Sigma^{*}$ は、連接 ${+\!\!+}$ を積、
+空文字列 $\varepsilon$ を単位元とするモノイドになる。
 
-すなわち、対象が 1 つの圏はモノイドと同じである。
+これを対象 1 つの圏として見ると、**文字列が射、連接が合成**である。
+たとえば $\mathtt{ab} \colon \ast \to \ast$ と $\mathtt{c} \colon \ast \to \ast$ の合成が
+$\mathtt{abc} = \mathtt{ab} \mathbin{+\!\!+} \mathtt{c}$ になる。
 </Example>
+
+同じ対象 $\ast$ を 3 回描くと、圏の合成の図式がそのまま連接の図になる。
+
+```tikz
+\usepackage{tikz-cd}
+\begin{document}
+\begin{tikzcd}[column sep=huge]
+\ast \arrow[r, "\mathtt{ab}"] \arrow[rr, bend right=40, "\mathtt{abc}"'] & \ast \arrow[r, "\mathtt{c}"] & \ast
+\end{tikzcd}
+\end{document}
+```
+
+恒等射は空文字列 $\varepsilon$ で、$\mathtt{ab} \mathbin{+\!\!+} \varepsilon = \mathtt{ab}$ が
+単位律にあたる。連接の結合律 $(\mathtt{a} \mathbin{+\!\!+} \mathtt{b}) \mathbin{+\!\!+} \mathtt{c} = \mathtt{a} \mathbin{+\!\!+} (\mathtt{b} \mathbin{+\!\!+} \mathtt{c})$ は、
+圏の合成の結合律そのものである。
