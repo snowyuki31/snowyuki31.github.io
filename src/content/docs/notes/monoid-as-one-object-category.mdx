@@ -6,11 +6,12 @@ description: 対象が 1 つの圏はモノイドと同じもの。
 import { Example } from '@components/env';
 
 <Example title="モノイドは対象が1つの圏" id="ex-monoid">
-対象を $\ast$ ただ 1 つとし、$\mathcal{C}(\ast, \ast)$ をモノイド $M$ の元全体とする。
-射の合成を $M$ の積、恒等射を単位元とすれば、結合律と単位律はそのまま圏の公理になる。
+対象を $\ast$ ただ 1 つとし、$\mathcal{C}(\ast, \ast)$ をモノイド $(M, \cdot, 1_M)$ の元全体とする。
+射の合成を $\cdot$、恒等射を $1_M$ とすれば、モノイドにおける結合律と単位律はそのまま圏の公理になる。
 
-つまり対象が 1 つの圏はモノイドと同じものをいう。
+すなわち、対象が 1 つの圏はモノイドと同じである。
 </Example>
+
 
 ```tikz
 \begin{document}
