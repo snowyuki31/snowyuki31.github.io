@@ -14,67 +14,20 @@
 
 同じ内容を参照面と発信面の両方に置かない。発信面から参照面へリンクする（逆は張らない）。
 
-## 構造（Obsidian と同じ思想 + 圏論的 MoC）
+## 構造（Obsidian と同じ思想）
 
 - **ノートはすべて atomic**（1 ノート 1 概念）。`src/content/docs/notes/*.mdx` に一元化
 - ノート間の参照は **`[[タイトル]]`**（wikilink）。build 時に frontmatter の `title` で解決される
-- **MoC は独立した種別ではなく「目録（`<Moc>` ブロック）を持つノート」という役割**。
-  どのノートも本文（プレート・数式・図）を持ちながら、目録を持てば MoC として振る舞う。
-  目録に目録を載せれば MoC of MoC（何も特別扱いしない）
-- **階層の辺 = `<Moc>` ブロック内の wikilink のみ**。本文中の wikilink は横のつながり（言及）。
-  root の `index.mdx`（Home）も同じ仕組みで最上位 MoC を列挙する
-- ここから導出されるもの:
-  - **パンくず**（タイトル上）: 属する全系統を 1 系統 1 行で表示（多親ならその数だけ）
-  - **左サイドバー**: MoC だけの階層ツリー（親もリンク、開閉は caret）。個々のノートは出さない
-  - **右サイドバー**: 目次の代わりに「このノートが属する MoC の図式」。現在ページのノードはハイライト
-  - **backlinks**（ページ末尾）: 本文中でこのノートを言及しているノートだけ（目録経由の所属はパンくずが持つ）
-- chrome は最小限: 検索なし・GitHub リンクなし。2 カラム以上では header も出さず、
-  左サイドバー上端の wordmark（snowyuki31）が Home へのリンク。1 カラムでは header に wordmark だけ
-
-### `<Moc>` — 目録は図式（diagram）
-
-MoC を「shape の圏 $J$ からノートの圏への関手」とみなす。kind = shape の種類で、
-どの kind もパース結果は同じ正規形（ノード + 型付き辺 + 束）に落ち、
-**階層は kind に依存しない**（kind の追加は `plugins/moc-kinds.mjs` の registry に足すだけ）。
-
-build 時に図式が生成されてブロックの直前に入る（白黒・クリック可能・client JS ゼロ）。
-**MoC ノートは二重枠 = 潜れるノード**（クリックでそのページ = その図式へ）。
-
-```mdx
-<Moc kind="set">        {/* J = 離散圏。並べるだけ（Home の最上位一覧など） */}
-
-- [[圏論]]
-- [[読書録]]
-
-</Moc>
-
-<Moc kind="sequence">   {/* J = 全順序。読む順序。省略時の既定 */}
-
-1. [[圏]]
-2. [[恒等射の一意性]]
-
-</Moc>
-
-<Moc kind="grouping">   {/* J = 分割。束ごとに比較・対立 */}
-
-- 構文論: [[A]], [[B]]
-- 意味論: [[C]]
-
-</Moc>
-
-<Moc kind="graph">      {/* J = 型付き辺の quiver。論文などの複雑な構造 */}
-
-[[圏]] --性質--> [[恒等射の一意性]]
-
-[[圏]] --例--> [[モノイドは対象1つの圏]]
-
-</Moc>
-```
-
-graph の中身は辺 DSL なので本文には出ない（図式だけが出る）。辺ラベルに `-` と `>` は使えない。
-
-**production build を落とす条件**（壊れた構造を公開しない）: Moc 内の未解決 wikilink、
-どの Moc からも Home へ辿れないページ（孤児）。dev 中は「（未整理）」表示で書き続けられる。
+- レイアウトは **左 Index + 本文の 2 カラム**:
+  - **左サイドバー**: 全ノートの一覧（タイトル順）。上端の wordmark（snowyuki31）が Home へのリンク
+  - **backlinks**（ページ末尾）: このノートへリンクしている全ノート
+- chrome は最小限: 検索なし・GitHub リンクなし・右ペインなし。2 カラム時は header も出さない。
+  1 カラム時は header に wordmark と、左端のハンバーガー（icon のみ。左サイドバーがモーダルで開く）
+- `<Moc>` ブロックは現在プレーンなリスト表示のみ。**MoC 由来のナビ機能
+  （図式生成・階層導出・パンくず・MoC ツリー・孤児検知）は一旦オフ**。
+  実装は `plugins/{moc-kinds,moc-render,hierarchy,remark-moc}.mjs` と
+  `src/components/{Breadcrumbs,TreeItem}.astro`・`overrides/{PageTitle,PageSidebar}.astro` に残っていて、
+  `astro.config.mjs` に再接続すれば戻る
 
 ### wikilink
 

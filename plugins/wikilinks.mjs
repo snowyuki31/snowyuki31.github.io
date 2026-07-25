@@ -85,12 +85,12 @@ export function resolveTitle(byTitle, title) {
 }
 
 /**
- * slug のノートを本文中（Moc 外）で言及しているノート（backlinks）。
- * 目録経由の所属はパンくず（階層）が示すので、ここには含めない。
+ * slug のノートへリンクしているノート（backlinks）。
+ * MoC 由来のナビは一旦オフにしているので、目録内・本文中を区別せず全リンクを数える。
  */
 export function backlinksFor(slug) {
   const { byTitle, notes } = scanNotes();
   return notes.filter(
-    (n) => n.slug !== slug && n.proseTitles.some((t) => byTitle.get(t)?.slug === slug),
+    (n) => n.slug !== slug && n.outTitles.some((t) => byTitle.get(t)?.slug === slug),
   );
 }

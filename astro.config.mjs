@@ -6,7 +6,6 @@ import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import { remarkTikz } from './plugins/remark-tikz.mjs';
 import { remarkWikilink } from './plugins/remark-wikilink.mjs';
-import { remarkMoc } from './plugins/remark-moc.mjs';
 
 // 和文はシステムのゴシック体に任せ、欧文だけ Roboto を当てる
 // （参照: nineties.github.io/topos-theory と同じ構成）
@@ -18,10 +17,9 @@ export default defineConfig({
 
   markdown: {
     processor: unified({
-      // remarkMoc は <Moc> 目録ブロックから図式を生成し、
       // remarkWikilink は [[タイトル]] をノートへのリンクに、
       // remarkTikz は ```tikz を build 時に SVG へコンパイルする（client JS ゼロ）
-      remarkPlugins: [remarkMoc, remarkWikilink, remarkMath, remarkTikz],
+      remarkPlugins: [remarkWikilink, remarkMath, remarkTikz],
       rehypePlugins: [[rehypeKatex, { strict: false, throwOnError: false }]],
     }),
   },
@@ -49,16 +47,14 @@ export default defineConfig({
       ],
       // 検索は置かない（構造で辿る）
       pagefind: false,
+      // 右ペインは置かない（左 Index + 本文の 2 カラム）
+      tableOfContents: false,
       components: {
         // トンマナは白黒 1 種のみ。テーマ切り替えを廃止する
         ThemeProvider: './src/components/overrides/ThemeProvider.astro',
         ThemeSelect: './src/components/overrides/ThemeSelect.astro',
-        // タイトル上にパンくず（全系統）
-        PageTitle: './src/components/overrides/PageTitle.astro',
-        // 左: wordmark + MoC ツリー（render 時に Moc の辺から導出）
+        // 左: wordmark + 全ノートの Index
         Sidebar: './src/components/overrides/Sidebar.astro',
-        // 右: 目次の代わりに「このノートが属する MoC の図式」
-        PageSidebar: './src/components/overrides/PageSidebar.astro',
         // ノート末尾に backlinks（linked mentions）を出す
         Footer: './src/components/overrides/Footer.astro',
       },

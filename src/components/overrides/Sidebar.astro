@@ -1,27 +1,31 @@
 ---
-// Sidebar override — 左サイドバー。
+// Sidebar override — 左サイドバー = 全ノートの Index。
 // header は 2 カラム以上で消すので、左上が Home へのリンク（wordmark）になる。
-// その下に MoC（目録を持つノート）だけの階層ツリー。個々のノートは出さない。
-import { mocTree } from '../../../plugins/hierarchy.mjs';
-import TreeItem from '../TreeItem.astro';
+import { scanNotes } from '../../../plugins/wikilinks.mjs';
 
 const route = (Astro.locals as any)?.starlightRoute;
 const raw: string = route?.id ?? route?.entry?.id ?? '';
 const slug = raw === 'index' ? '' : raw.replace(/\/index$/, '');
-const tree = mocTree();
+
+const { notes } = scanNotes();
+const items = notes
+  .filter((n) => n.slug !== '')
+  .sort((a, b) => a.title.localeCompare(b.title, 'ja'));
 ---
 
 <div class="kb-side">
   <a class="kb-wordmark" href="/">snowyuki31</a>
-  {
-    tree.length > 0 && (
-      <nav class="kb-tree" aria-label="Map of Contents">
-        <ul>
-          {tree.map((n) => (
-            <TreeItem node={n} current={slug} />
-          ))}
-        </ul>
-      </nav>
-    )
-  }
+  <nav class="kb-index" aria-label="Index">
+    <ul>
+      {
+        items.map((n) => (
+          <li>
+            <a href={`/${n.slug}/`} aria-current={slug === n.slug ? 'page' : undefined}>
+              {n.title}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
 </div>

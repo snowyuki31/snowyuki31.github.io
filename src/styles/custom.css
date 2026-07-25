@@ -271,6 +271,53 @@
 	}
 }
 
+/* 1 カラム時のハンバーガーは icon のみ・左側に置く（title はその右に） */
+@media (max-width: 49.999rem) {
+	starlight-menu-button button {
+		inset-inline-end: auto;
+		inset-inline-start: var(--sl-nav-pad-x);
+		background-color: transparent;
+		color: #000;
+		box-shadow: none;
+	}
+
+	starlight-menu-button[aria-expanded='true'] button {
+		background-color: transparent;
+		color: #000;
+	}
+
+	header.header {
+		padding-inline-start: calc(var(--sl-nav-pad-x) + var(--sl-menu-button-size) + 0.6rem);
+	}
+}
+
+/* 左: 全ノートの Index */
+.kb-index {
+	font-size: 0.9rem;
+	line-height: 1.9;
+}
+
+.kb-index ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.kb-index a {
+	color: var(--kb-gray-700);
+	text-decoration: none;
+}
+
+.kb-index a:hover {
+	color: #000;
+	text-decoration: underline;
+}
+
+.kb-index a[aria-current='page'] {
+	color: #000;
+	font-weight: 700;
+}
+
 /* 左: MoC ツリー。親（開閉できる行）もリンク、開閉は caret で行う */
 .kb-tree {
 	font-size: 0.9rem;
