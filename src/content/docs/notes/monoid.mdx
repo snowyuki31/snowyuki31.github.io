@@ -9,9 +9,10 @@ import { Definition, Example } from '@components/env';
 **モノイド**とは、対象が 1 つの [[圏]] をいう。
 </Definition>
 
-以下は、モノイドを2 通りに図示したもの。左は**対象が 1 つ**であることを強調した図で、すべての射が
+モノイドを図示すると以下のようになる。
+左は**対象が 1 つ**であることを強調した図で、すべての射が
 $\ast$ のループになる。右は**射が複数あって合成される**ことを強調した図で、同じ $\ast$ を
-並べて展開したもの。
+並べて展開している。
 
 ```tikz
 \begin{document}
@@ -52,16 +53,15 @@ $\cdot \colon M \times M \to M$、および単位元 $1_M \in M$
 <Example title="文字列と連接" id="ex-strings">
 アルファベット $\Sigma$ 上の文字列全体 $\Sigma^{*}$ は、連接 ${+\!\!+}$ を積、
 空文字列 $\varepsilon$ を単位元とするモノイドになる。
+</Example>
 
 これを対象 1 つの圏として見ると、**文字列が射、連接が合成**である。
 たとえば $\mathtt{ab} \colon \ast \to \ast$ と $\mathtt{c} \colon \ast \to \ast$ の合成が
 $\mathtt{abc} = \mathtt{ab} \mathbin{+\!\!+} \mathtt{c}$ になる。
-</Example>
 
-同じ対象 $\ast$ を並べて描くと、圏の合成の図式がそのまま連接の図になる。
-合成を重ねるたびに文字列が伸びていく:
+以下、
 $\mathtt{abc} = \mathtt{ab} \mathbin{+\!\!+} \mathtt{c}$、
-$\mathtt{abcba} = \mathtt{abc} \mathbin{+\!\!+} \mathtt{ba}$。
+$\mathtt{abcba} = \mathtt{abc} \mathbin{+\!\!+} \mathtt{ba}$を図示したもの。
 
 ```tikz
 \usepackage{tikz-cd}
@@ -83,7 +83,7 @@ $(\mathbb{N}, \gcd, 0)$ はモノイドになる。
 </Example>
 
 以下、$12$ と $18$ の合成が $\gcd(12, 18) = 6$、さらに $8$ と合成すると $\gcd(6, 8) = 2$、
-$5$ と合成すると $\gcd(2, 5) = 1$（互いに素）になっていく様子の図示。
+$5$ と合成すると $\gcd(2, 5) = 1$（互いに素）になっていく様子を図示したもの。
 
 ```tikz
 \usepackage{tikz-cd}
