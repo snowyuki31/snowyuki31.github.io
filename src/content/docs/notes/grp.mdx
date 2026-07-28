@@ -1,0 +1,188 @@
+---
+title: 群の圏
+description: 群を対象、群準同型を射とする圏 Grp。
+---
+
+import { Definition, Example, Proposition, Proof } from '@components/env';
+
+[[モノイドの圏]] と同じ要領で、「群全体」を [[圏]] として扱う。
+そのために、まず群どうしを結ぶ射を定める。
+
+<Definition title="群準同型" id="def-group-hom">
+群 $(G, \cdot)$ から $(H, \ast)$ への写像 $\varphi \colon G \to H$ が
+**群準同型**であるとは、任意の $a, b \in G$ について
+
+$$
+\varphi(a \cdot b) = \varphi(a) \ast \varphi(b)
+$$
+
+が成り立つことをいう。
+</Definition>
+
+モノイド準同型と違って単位元の保存を要求していないが、群では
+$\varphi(e_G) = \varphi(e_G \cdot e_G) = \varphi(e_G) \ast \varphi(e_G)$ の両辺に
+$\varphi(e_G)^{-1}$ を掛ければ $\varphi(e_G) = e_H$ が**自動的に**従う
+（逆元の保存 $\varphi(a^{-1}) = \varphi(a)^{-1}$ も同様）。
+
+<Example title="指数写像" id="ex-exponent">
+$x \in \mathbb{R}_{>0}$ を 1 つ固定する。整数をその冪に移す
+$\varphi \colon (\mathbb{Z}, +) \to (\mathbb{R}_{>0}, \times)$、$\varphi(n) = x^{n}$
+は、加法を乗法に移す準同型である（$x^{m+n} = x^{m} \times x^{n}$）。
+</Example>
+
+準同型の条件は、「先に演算してから移す」と「移してから演算する」が一致すること、
+すなわち次の図式が可換であることに他ならない。
+
+```tikz
+\usepackage{tikz-cd}
+\usepackage{amssymb}
+\begin{document}
+\begin{tikzcd}[row sep=huge, column sep=huge]
+\mathbb{Z}\times\mathbb{Z} \arrow[r, "+"] \arrow[d, "\varphi\times\varphi"'] & \mathbb{Z} \arrow[d, "\varphi"] \\
+\mathbb{R}_{>0}\times\mathbb{R}_{>0} \arrow[r, "\times"'] & \mathbb{R}_{>0}
+\end{tikzcd}
+\end{document}
+```
+
+<Example title="部分群の包含" id="ex-inclusion">
+部分群 $N \leq G$ に対して、包含写像 $N \to G$、$n \mapsto n$ は準同型である。
+</Example>
+
+<Definition title="群の圏" id="def-grp">
+群を対象、群準同型を射とする圏を**群の圏** $\mathbf{Grp}$ と呼ぶ。
+</Definition>
+
+これが圏の公理を満たすことの確認は [[モノイドの圏]] と同様である
+（恒等写像は準同型、準同型の合成は準同型、単位律・結合律は写像の合成から従う）。
+
+## 核
+
+自明群 $1 = \{e\}$ は $\mathbf{Grp}$ の [[零対象・零射|零対象]] である。
+任意の群 $G$ について、射 $1 \to G$ は $e \mapsto e_G$ の 1 つだけ（準同型は単位元を保つ）、
+射 $G \to 1$ も全元を $e$ に送る 1 つだけだからである。
+したがって零射 $0 \colon G \to H$（全元を $e_H$ に送る自明な準同型）が定まり、
+$\mathbf{Grp}$ で [[核]] を考えることができる。
+
+<Proposition title="Grp における核" id="prop-kernel-in-grp">
+群準同型 $\varphi \colon G \to H$ に対して、部分群
+
+$$
+\ker\varphi = \{\, x \in G \mid \varphi(x) = e_H \,\}
+$$
+
+と包含写像 $k \colon \ker\varphi \to G$ が、[[核]] の普遍性を満たす。
+</Proposition>
+
+```tikz
+\usepackage{tikz-cd}
+\usepackage{amssymb}
+\begin{document}
+\begin{tikzcd}[row sep=huge, column sep=huge]
+\ker\varphi \arrow[r, "k"] & G \arrow[r, "\varphi"] & H \\
+K' \arrow[u, dashed, "\exists! u"] \arrow[ru, "k'"'] & &
+\end{tikzcd}
+\end{document}
+```
+
+<Proof>
+$\varphi \circ k = 0$ は $\ker\varphi$ の定め方そのものである。
+次に $\varphi \circ k' = 0$ を満たす任意の準同型 $k' \colon K' \to G$ を取ると、
+$K'$ の各元 $y$ について $\varphi(k'(y)) = e_H$、すなわち $k'(y) \in \ker\varphi$ なので、
+$u(y) = k'(y)$（行き先を $\ker\varphi$ と見なす）が準同型 $u \colon K' \to \ker\varphi$ を定め、
+$k' = k \circ u$ となる。$k$ は単射だから、この $u$ 以外に $k' = k \circ u$ を満たす射はない。
+</Proof>
+
+<Example title="指数写像の核" id="ex-kernel-exponent">
+指数写像 $\varphi(n) = x^{n}$ の核は、$x \neq 1$ なら $\ker\varphi = \{0\}$
+（$x^{n} = 1$ となる整数は $n = 0$ のみ）、$x = 1$ なら $\ker\varphi = \mathbb{Z}$
+（すべて潰れる）。核が $\varphi$ の「潰し具合」を測っている。
+</Example>
+
+## 像
+
+<Definition title="像" id="def-image">
+群準同型 $\varphi \colon G \to H$ に対して、
+
+$$
+\operatorname{Im}\varphi = \{\, \varphi(x) \mid x \in G \,\}
+$$
+
+は $H$ の部分群となる。これを $\varphi$ の**像**（image）と呼ぶ。
+</Definition>
+
+部分群であることは、$\varphi(a) \ast \varphi(b) = \varphi(a \cdot b)$ と
+$\varphi(a)^{-1} = \varphi(a^{-1})$ がどちらも $\operatorname{Im}\varphi$ に
+入っていることから従う。よって包含 $\operatorname{Im}\varphi \to H$ は準同型であり、
+$\varphi$ 自身は「全射してから包含する」という 2 段に分解できる。
+
+```tikz
+\usepackage{tikz-cd}
+\usepackage{amssymb}
+\begin{document}
+\begin{tikzcd}[row sep=huge, column sep=huge]
+G \arrow[rr, "\varphi"] \arrow[rd, two heads] & & H \\
+ & \mathrm{Im}\,\varphi \arrow[ru, hook] &
+\end{tikzcd}
+\end{document}
+```
+
+<Example title="指数写像の像" id="ex-image-exponent">
+指数写像 $\varphi(n) = x^{n}$ の像は $\operatorname{Im}\varphi = \{\, x^{n} \mid n \in \mathbb{Z} \,\}$、
+すなわち $x$ が生成する巡回部分群である。核が「潰れた部分」を測るのに対して、
+像は「実際に届いた部分」を切り出している。
+</Example>
+
+核と違って、像の圏論的な特徴づけ（$\varphi$ が経由できる最小の部分対象）は
+ここでは扱わない。
+
+## 正規部分群
+
+<Definition title="正規部分群" id="def-normal-subgroup">
+群 $G$ の部分群 $N \leq G$ が**正規部分群**（normal subgroup）であるとは、
+包含 $N \to G$ が**ある群準同型 $\varphi \colon G \to H$ の [[核]] になっている**ことをいい、
+$N \trianglelefteq G$ と書く。
+</Definition>
+
+核は射の言葉だけで定義された概念なので、これは正規部分群の圏論的な定義である。
+正規性は部分群 $N$ 単体の性質ではなく、包含という**射**の性質であることも
+この定義からは明らかである。
+
+```tikz
+\usepackage{tikz-cd}
+\usepackage{amssymb}
+\begin{document}
+\begin{tikzcd}[row sep=huge, column sep=huge]
+N \arrow[r, hook] \arrow[rr, bend right=25, "0"'] & G \arrow[r, "\varphi"] & H
+\end{tikzcd}
+\end{document}
+```
+
+$\mathbf{Grp}$ の中でこの定義を展開すると、よく知られた元による条件が出てくる。
+
+<Proposition title="正規部分群（元による特徴づけ）" id="prop-normal-elementwise">
+部分群 $N \leq G$ について、次は同値である。
+
+1. $N \trianglelefteq G$
+2. 任意の $g \in G$ について $g N g^{-1} = N$
+</Proposition>
+
+<Proof>
+$1 \Rightarrow 2$: $N = \ker\varphi$ とする。$x \in N$、$g \in G$ を任意に取ると
+
+$$
+\varphi(g x g^{-1}) = \varphi(g) \ast \varphi(x) \ast \varphi(g)^{-1}
+= \varphi(g) \ast e_H \ast \varphi(g)^{-1} = e_H
+$$
+
+なので $g x g^{-1} \in N$、すなわち $g N g^{-1} \subseteq N$。
+$g^{-1}$ についても同じことが言えるので、等号が成り立つ。
+
+$2 \Rightarrow 1$: $g N g^{-1} = N$ を満たす $N$ を核に持つ準同型を作って見せる必要があり、
+商群 $G/N$ への射影がそれを与える。証明は商群の節で完成させる。
+</Proof>
+
+<Example title="剰余写像の核" id="ex-normal-remainder">
+剰余を取る準同型 $\mathbb{Z} \to \mathbb{Z}/n\mathbb{Z}$ の核は
+$n\mathbb{Z} = \{\, nm \mid m \in \mathbb{Z} \,\}$ なので、$n\mathbb{Z} \trianglelefteq \mathbb{Z}$
+（アーベル群では $g x g^{-1} = x$ なので、そもそもすべての部分群が正規である）。
+</Example>

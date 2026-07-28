@@ -1,0 +1,40 @@
+---
+title: 始対象・終対象
+description: 任意の対象との間に射がちょうど 1 つ存在するという普遍性で定まる特別な対象。
+---
+
+import { Definition } from '@components/env';
+
+<Definition title="始対象" id="def-initial-object">
+[[圏]] $\mathcal{C}$ の対象 $I$ が**始対象**（initial object）であるとは、
+$\mathcal{C}$ の任意の対象 $X$ に対して、射 $I \to X$ が**ちょうど 1 つ**存在することをいう。
+</Definition>
+
+```tikz
+\usepackage{tikz-cd}
+\usepackage{amssymb}
+\begin{document}
+\begin{tikzcd}[row sep=small, column sep=huge]
+ & X \\
+I \arrow[ru, dashed, "\exists!"] \arrow[r, dashed, "\exists!"] \arrow[rd, dashed, "\exists!"'] & Y \\
+ & Z
+\end{tikzcd}
+\end{document}
+```
+
+<Definition title="終対象" id="def-terminal-object">
+圏 $\mathcal{C}$ の対象 $T$ が**終対象**（terminal object）であるとは、
+$\mathcal{C}$ の任意の対象 $X$ に対して、射 $X \to T$ が**ちょうど 1 つ**存在することをいう。
+</Definition>
+
+```tikz
+\usepackage{tikz-cd}
+\usepackage{amssymb}
+\begin{document}
+\begin{tikzcd}[row sep=small, column sep=huge]
+X \arrow[rd, dashed, "\exists!"] & \\
+Y \arrow[r, dashed, "\exists!"] & T \\
+Z \arrow[ru, dashed, "\exists!"'] &
+\end{tikzcd}
+\end{document}
+```

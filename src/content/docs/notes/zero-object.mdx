@@ -1,0 +1,27 @@
+---
+title: 零対象・零射
+description: 始対象かつ終対象である対象と、それを経由して定まる標準的な射。
+---
+
+import { Definition } from '@components/env';
+
+<Definition title="零対象" id="def-zero-object">
+[[始対象・終対象|始対象]] かつ終対象である対象を**零対象**（zero object）といい、$0$ と書く。
+</Definition>
+
+<Definition title="零射" id="def-zero-morphism">
+零対象 $0$ を持つ圏 $\mathcal{C}$ の任意の対象 $X, Y$ に対して、
+合成 $X \to 0 \to Y$（各射は始対象・終対象の普遍性からそれぞれちょうど 1 つ）を
+**零射**（zero morphism）といい、$0 \colon X \to Y$ と書く。
+</Definition>
+
+```tikz
+\usepackage{tikz-cd}
+\usepackage{amssymb}
+\begin{document}
+\begin{tikzcd}[row sep=huge, column sep=huge]
+X \arrow[rr, "0"] \arrow[rd, dashed, "\exists!"'] & & Y \\
+ & 0 \arrow[ru, dashed, "\exists!"'] &
+\end{tikzcd}
+\end{document}
+```

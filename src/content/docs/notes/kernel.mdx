@@ -1,0 +1,32 @@
+---
+title: 核
+description: 射と零射を等しくする射のうち普遍的なもの。「φ で潰れる部分」の圏論的な表現。
+---
+
+import { Definition } from '@components/env';
+
+<Definition title="核" id="def-kernel">
+[[零対象・零射|零対象]] を持つ [[圏]] $\mathcal{C}$ の射 $\varphi \colon X \to Y$ に対して、
+射 $k \colon K \to X$ が $\varphi$ の**核**（kernel）であるとは、次の 2 つを満たすことをいう。
+
+1. $\varphi \circ k = 0$
+2. $\varphi \circ k' = 0$ を満たす任意の射 $k' \colon K' \to X$ に対して、
+   $k' = k \circ u$ となる射 $u \colon K' \to K$ が**ただ 1 つ**存在する
+
+このとき $\ker \varphi$ と書く。
+</Definition>
+
+核の実体は射 $k$であって、対象 $K$ 単体ではない
+（同じ $K$ でも別の射で $X$ に入れば核とは限らない）。
+ただし慣用では、定義域 $K$ の方を $\ker \varphi$ と呼ぶことが多い。
+
+```tikz
+\usepackage{tikz-cd}
+\usepackage{amssymb}
+\begin{document}
+\begin{tikzcd}[row sep=huge, column sep=huge]
+K \arrow[r, "k"] & X \arrow[r, "\varphi"] & Y \\
+K' \arrow[u, dashed, "\exists! u"] \arrow[ru, "k'"'] & &
+\end{tikzcd}
+\end{document}
+```
