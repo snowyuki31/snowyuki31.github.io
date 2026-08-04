@@ -1,4 +1,5 @@
 ---
+understanding: high
 title: 群準同型の核と像
 description: Grp の零対象・零射と、核・像の具体形。
 ---
@@ -47,6 +48,37 @@ $k' = k \circ u$ となる。$k$ は単射だから、この $u$ 以外に $k' =
 （$x^{n} = 1$ となる整数は $n = 0$ のみ）、$x = 1$ なら $\ker\varphi = \mathbb{Z}$
 （すべて潰れる）。核が $\varphi$ の「潰し具合」を測っている。
 </Example>
+
+<Example title="アーベル群ではすべての部分群が核" id="ex-kernel-abelian">
+アーベル群 $G$ では $gxg^{-1} = x$ なのですべての部分群 $N \leq G$ が
+[[正規部分群|正規]]であり、[[商群]] への射影 $\pi \colon G \to G/N$ の核として現れる。
+つまり**アーベル群の部分群はすべて核**である。
+例えば $2\mathbb{Z} = \ker(\mathbb{Z} \to \mathbb{Z}/2\mathbb{Z})$。
+</Example>
+
+$2\mathbb{Z} = \ker \pi_2$ であることを [[核]] の普遍性の図で見てみる。
+$4\mathbb{Z}, 8\mathbb{Z}, 16\mathbb{Z}$ はどれも偶数だけからなるので、
+$\mathbb{Z}$ への包含を $\pi_2$ と合成すると零射になる（$\pi_2 \circ k' = 0$）。
+よって核の普遍性から、それぞれ $2\mathbb{Z}$ をただ 1 通りに経由する。
+
+```tikz
+\usepackage{tikz-cd}
+\usepackage{amssymb}
+\begin{document}
+\begin{tikzcd}[row sep=large, column sep=huge]
+2\mathbb{Z} \arrow[r, hook, "k"] & \mathbb{Z} \arrow[r, "\pi_2"] & \mathbb{Z}/2\mathbb{Z} \\
+4\mathbb{Z} \arrow[u, dashed, "\exists! u"] \arrow[ru, hook] & & \\
+8\mathbb{Z} \arrow[u, dashed, "\exists! u"] \arrow[ruu, hook, bend right=15] & & \\
+16\mathbb{Z} \arrow[u, dashed, "\exists! u"] \arrow[ruuu, hook, bend right=25] & &
+\end{tikzcd}
+\end{document}
+```
+
+破線の $\exists!\,u$ を上へたどると
+$16\mathbb{Z} \leq 8\mathbb{Z} \leq 4\mathbb{Z} \leq 2\mathbb{Z}$ という
+[[部分対象]] としての順序の鎖になっている
+（経由する側が下。集合の包含 $16\mathbb{Z} \subseteq \cdots \subseteq 2\mathbb{Z}$ と一致する）。
+核 $2\mathbb{Z}$ は「$\pi_2$ で潰れるものの中で一番上（最大）」にいる。
 
 ## 像
 
