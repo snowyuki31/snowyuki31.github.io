@@ -1,0 +1,95 @@
+---
+title: 群
+description: すべての射が同型であるモノイド。展開すると「逆元を持つモノイド」になる。
+---
+
+import { Definition, Example, Proposition, Proof } from '@components/env';
+
+<Definition title="群" id="def-group">
+**群**とは、すべての射が同型射である [[モノイド]]（対象が 1 つの [[圏]]）をいう。
+</Definition>
+
+[[モノイド]] と同様に唯一の対象を $\ast$ として展開すると、射の集まりが集合 $G$、
+合成が二項演算、恒等射が単位元にあたり、「すべての射が同型」が
+「すべての元が逆元を持つ」に翻訳されて、次の代数的な定義が得られる。
+
+<Definition title="群（代数的定義）" id="def-group-algebraic">
+**群** $(G, \cdot, e)$ とは、モノイド $(G, \cdot, e)$ であって、
+任意の $g \in G$ に対して
+
+$$
+g \cdot g^{-1} = e = g^{-1} \cdot g
+$$
+
+を満たす**逆元** $g^{-1} \in G$ が存在するものをいう。
+</Definition>
+
+```tikz
+\usepackage{tikz-cd}
+\usepackage{amssymb}
+\begin{document}
+\begin{tikzcd}[column sep=huge]
+\ast \arrow[loop left, "e"] \arrow[r, bend left=30, "g"] & \ast \arrow[l, bend left=30, "g^{-1}"]
+\end{tikzcd}
+\end{document}
+```
+
+（対象は 1 つなので左右の $\ast$ は同じ対象。どの射 $g$ にも、合成すると恒等射 $e$ に戻る
+相方 $g^{-1}$ がいる、というのが群である。）
+
+モノイドとの差分は「逆元」だけだが、これにより**消せる**という決定的な能力が加わる。
+
+<Proposition title="簡約律" id="prop-cancellation">
+群 $G$ の元 $a, x, y$ について
+
+$$
+a \cdot x = a \cdot y \implies x = y
+\qquad
+x \cdot a = y \cdot a \implies x = y
+$$
+
+が成り立つ。また、逆元は各元ごとにただ 1 つである。
+</Proposition>
+
+<Proof>
+$a \cdot x = a \cdot y$ の両辺に左から $a^{-1}$ を掛ければ $x = y$（右簡約も同様）。
+$g$ の逆元が $h, h'$ の 2 つあれば、$g \cdot h = e = g \cdot h'$ に左簡約を使って $h = h'$。
+</Proof>
+
+モノイドでは成り立たない点に注意（$(\mathbb{N}, \gcd, 0)$ では
+$\gcd(2, 4) = \gcd(2, 8)$ だが $4 \neq 8$）。
+
+<Example title="整数の加法" id="ex-integers">
+$(\mathbb{Z}, +, 0)$ は群である。$n$ の逆元は $-n$。
+モノイド $(\mathbb{N}, +, 0)$ には $1$ の逆元がないので、
+$\mathbb{N}$ を群にするために負の数を添加したものが $\mathbb{Z}$ だと見ることもできる。
+</Example>
+
+<Example title="正の実数の乗法" id="ex-positive-reals">
+$(\mathbb{R}_{>0}, \times, 1)$ は群である。$x$ の逆元は $1/x$。
+$(\mathbb{R}, \times, 1)$ は $0$ に逆元がないので群でない。
+</Example>
+
+<Example title="剰余類の加法" id="ex-mod-n">
+$\mathbb{Z}/n\mathbb{Z} = \{\bar{0}, \bar{1}, \ldots, \overline{n-1}\}$（$n$ で割った余り）は
+$\bar{a} + \bar{b} = \overline{a+b}$ で群になる。$\bar{a}$ の逆元は $\overline{n-a}$。
+有限集合が群になる最初の例である。
+</Example>
+
+<Example title="対称群" id="ex-symmetric-group">
+集合 $\{1, \ldots, n\}$ の全単射（置換）の全体 $S_n$ は、写像の合成を積として群になる。
+逆元は逆写像。$n \geq 3$ では $\sigma \tau \neq \tau \sigma$ となる置換があり、
+演算の順序が結果を変える。
+</Example>
+
+演算の順序によらない群には名前がついている。
+
+<Definition title="アーベル群" id="def-abelian-group">
+群 $G$ が**アーベル群**（可換群）であるとは、任意の $a, b \in G$ について
+$a \cdot b = b \cdot a$ が成り立つことをいう。
+</Definition>
+
+上の例では $\mathbb{Z}$、$\mathbb{R}_{>0}$、$\mathbb{Z}/n\mathbb{Z}$ がアーベル群で、
+$S_n$（$n \geq 3$）がアーベルでない群である。
+
+群全体を対象として眺めた圏が [[群の圏]] である。

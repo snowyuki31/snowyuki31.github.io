@@ -1,0 +1,52 @@
+---
+title: 準同型定理
+description: G/ker φ ≅ Im φ。核・像・商群の関係を 1 つの同型に集約する。
+---
+
+import { Example, Theorem, Proof } from '@components/env';
+
+[[商群]] の普遍性を $N = \ker\varphi$ に適用すると、
+[[群準同型の核と像|核・像]]・商群の関係が 1 つの同型に集約される。
+
+<Theorem title="準同型定理" id="thm-first-isomorphism">
+群準同型 $\varphi \colon G \to H$ に対して
+
+$$
+G/\ker\varphi \;\cong\; \operatorname{Im}\varphi
+$$
+
+が成り立つ。
+</Theorem>
+
+```tikz
+\usepackage{tikz-cd}
+\usepackage{amssymb}
+\begin{document}
+\begin{tikzcd}[row sep=huge, column sep=huge]
+G \arrow[rr, "\varphi"] \arrow[d, two heads, "\pi"'] & & H \\
+G/\ker\varphi \arrow[rr, "\cong"'] & & \mathrm{Im}\,\varphi \arrow[u, hook]
+\end{tikzcd}
+\end{document}
+```
+
+<Proof>
+$N = \ker\varphi$ として [[商群]] の普遍性を（終域を $\operatorname{Im}\varphi$ に絞って）適用すると、
+$\bar{\varphi} \colon G/\ker\varphi \to \operatorname{Im}\varphi$、
+$\bar{\varphi}(g \ker\varphi) = \varphi(g)$ が得られる。
+全射: $\operatorname{Im}\varphi$ の元は $\varphi(g)$ の形なので $\bar{\varphi}$ が拾い尽くす。
+単射: $\bar{\varphi}(g \ker\varphi) = e_H$ なら $\varphi(g) = e_H$、
+すなわち $g \in \ker\varphi$ なので $g \ker\varphi = \ker\varphi$（単位元）。
+よって $\bar{\varphi}$ は全単射準同型、すなわち同型である。
+</Proof>
+
+<Example title="指数写像の準同型定理" id="ex-first-iso-exponent">
+指数写像 $\varphi(n) = x^{n}$（$x \neq 1$）では $\ker\varphi = \{0\}$ だったから、
+
+$$
+\mathbb{Z} \cong \mathbb{Z}/\{0\} \cong \operatorname{Im}\varphi = \{\, x^{n} \mid n \in \mathbb{Z} \,\}
+$$
+
+すなわち $x$ の生成する巡回部分群は $\mathbb{Z}$ の複製である。
+「$\varphi$ から潰れる分（$\ker$）を除けば、残り（$\operatorname{Im}$）は元の群と同型」——
+核が測っていた「潰し具合」の帳尻が、ここで合う。
+</Example>
