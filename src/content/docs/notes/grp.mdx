@@ -1,4 +1,5 @@
 ---
+understanding: high
 title: 群の圏
 description: 群を対象、群準同型を射とする圏 Grp。
 ---
@@ -74,9 +75,30 @@ $\varphi(f(n)) = \varphi(a)^{n} = \varphi(b)^{n} = \varphi(g(n))$、
 特に $a = f(1) = g(1) = b$。
 </Proof>
 
-単射準同型 $\varphi$ のもとで $K$ は部分群 $\varphi(K) \leq G$ と同型だから、
-この命題により、$\mathbf{Grp}$ のモノ射は（同型による付け替えを除いて）
-**部分群の包含にほかならない**。可換図式で包含を $\hookrightarrow$ と書くのは
-この対応による。
+
+<Proposition title="Grp における部分対象は部分群" id="prop-subobject-subgroup">
+群 $G$ の [[部分対象]] と $G$ の部分群は 1 対 1 に対応する。
+対応は、モノ射 $\varphi \colon K \to G$ に部分群
+$\varphi(K) = \{\, \varphi(x) \mid x \in K \,\} \leq G$ を割り当てることで与えられる。
+</Proposition>
+
+<Proof>
+モノ射 $\varphi \colon K \to G$、$\varphi' \colon K' \to G$ について
+$\varphi \sim \varphi'$ と $\varphi(K) = \varphi'(K')$ が同値であることを示せばよい。
+
+$\varphi \sim \varphi'$ とすると、$\varphi = \varphi' \circ u$ となる $u$ が存在するので
+$\varphi(K) = \varphi'(u(K)) \subseteq \varphi'(K')$、逆向きも同様で
+$\varphi(K) = \varphi'(K')$。
+
+逆に $\varphi(K) = \varphi'(K')$ とすると、$\varphi'$ は単射だから
+$u = (\varphi')^{-1} \circ \varphi \colon K \to K'$ が定まり
+（各 $x \in K$ で $\varphi(x) \in \varphi'(K')$ なので行き先がある）、
+$\varphi = \varphi' \circ u$。逆向きも同様で $\varphi \sim \varphi'$。
+
+また、どの部分群 $H \leq G$ も包含 $H \hookrightarrow G$ というモノ射から
+$\varphi(H) = H$ として得られるので、対応は全射でもある。
+</Proof>
+
+この対応のもとで、部分対象の順序 $\leq$ は部分群の包含関係 $\subseteq$ と一致する。
 
 この圏の中で群論の基本概念を捉え直す続きは [[群準同型の核と像]] へ。
