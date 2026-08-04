@@ -1,0 +1,74 @@
+---
+title: 商群
+description: 正規部分群を潰して作る群と、その普遍性。
+---
+
+import { Definition, Example, Proposition, Proof } from '@components/env';
+
+<Definition title="商群" id="def-quotient-group">
+[[正規部分群]] $N \trianglelefteq G$ に対して、剰余類 $gN = \{\, gn \mid n \in N \,\}$ の全体
+
+$$
+G/N = \{\, gN \mid g \in G \,\}
+$$
+
+に演算 $(aN)(bN) = (ab)N$ を定めたものを**商群**（quotient group）と呼ぶ。
+</Definition>
+
+この演算が代表の取り方によらないこと（well-defined 性）に、正規性が使われる。
+$a' = an$、$b' = bm$（$n, m \in N$）と代表を取り替えると
+
+$$
+a'b' = anbm = ab \,(b^{-1} n b)\, m
+$$
+
+であり、$b^{-1} n b \in N$（元による特徴づけ）だから $a'b' \in (ab)N$ となる。
+単位元は $eN = N$、$gN$ の逆元は $g^{-1}N$ である。
+
+<Proposition title="射影と正規部分群" id="prop-projection">
+$g$ をその剰余類に送る**射影** $\pi \colon G \to G/N$、$\pi(g) = gN$ は
+全射準同型であり、$\ker\pi = N$ である。
+</Proposition>
+
+<Proof>
+$\pi(ab) = (ab)N = (aN)(bN) = \pi(a)\pi(b)$ で準同型、全射は定め方から明らか。
+また $\pi(g) = N \iff gN = N \iff g \in N$ なので $\ker\pi = N$。
+</Proof>
+
+これで [[正規部分群]] の元による特徴づけに残っていた $2 \Rightarrow 1$ が完成する:
+$g N g^{-1} = N$ を満たす $N$ は、射影 $\pi \colon G \to G/N$ の核として現れる。
+
+<Example title="剰余類のなす群" id="ex-quotient-remainder">
+$n\mathbb{Z} \trianglelefteq \mathbb{Z}$ による商群 $\mathbb{Z}/n\mathbb{Z}$ は、
+剰余類 $\bar{k} = k + n\mathbb{Z}$ を $n$ 個並べた巡回群であり、
+射影 $\pi \colon \mathbb{Z} \to \mathbb{Z}/n\mathbb{Z}$ は剰余を取る準同型そのものである。
+</Example>
+
+商群の本質は「$N$ を潰す準同型の中で、$\pi$ が一番潰しが少ない」という普遍性にある。
+
+<Proposition title="商群の普遍性" id="prop-quotient-universality">
+準同型 $\varphi \colon G \to H$ が $N \subseteq \ker\varphi$ を満たすなら
+（$\varphi$ が $N$ を潰すなら）、$\varphi = \bar{\varphi} \circ \pi$ となる準同型
+$\bar{\varphi} \colon G/N \to H$ が**ただ 1 つ**存在する。
+</Proposition>
+
+```tikz
+\usepackage{tikz-cd}
+\usepackage{amssymb}
+\begin{document}
+\begin{tikzcd}[row sep=huge, column sep=huge]
+G \arrow[r, "\varphi"] \arrow[d, two heads, "\pi"'] & H \\
+G/N \arrow[ru, dashed, "\exists!\ \bar{\varphi}"'] &
+\end{tikzcd}
+\end{document}
+```
+
+<Proof>
+$\bar{\varphi}(gN) = \varphi(g)$ と定める。代表を $g' = gn$（$n \in N$）に取り替えても
+$\varphi(g') = \varphi(g)\varphi(n) = \varphi(g)$（$N \subseteq \ker\varphi$）なので
+well-defined であり、準同型性と $\varphi = \bar{\varphi} \circ \pi$ は定め方から従う。
+一意性: $\bar{\varphi}' \circ \pi = \varphi = \bar{\varphi} \circ \pi$ とすると、
+$\pi$ が全射（エピ射）だから右簡約できて $\bar{\varphi}' = \bar{\varphi}$。
+</Proof>
+
+この普遍性を $N = \ker\varphi$ に適用したものが [[準同型定理]] である。

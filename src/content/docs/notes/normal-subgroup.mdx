@@ -1,0 +1,57 @@
+---
+title: 正規部分群
+description: ある準同型の核になっている部分群。正規性は包含という射の性質。
+---
+
+import { Definition, Example, Proposition, Proof } from '@components/env';
+
+<Definition title="正規部分群" id="def-normal-subgroup">
+群 $G$ の部分群 $N \leq G$ が**正規部分群**（normal subgroup）であるとは、
+包含 $N \to G$ が**ある群準同型 $\varphi \colon G \to H$ の [[核]] になっている**ことをいい、
+$N \trianglelefteq G$ と書く。
+</Definition>
+
+核は射の言葉だけで定義された概念なので、これは正規部分群の圏論的な定義である。
+正規性は部分群 $N$ 単体の性質ではなく、包含という**射**の性質であることも
+この定義からは明らかである。
+
+```tikz
+\usepackage{tikz-cd}
+\usepackage{amssymb}
+\begin{document}
+\begin{tikzcd}[row sep=huge, column sep=huge]
+N \arrow[r, hook] \arrow[rr, bend right=25, "0"'] & G \arrow[r, "\varphi"] & H
+\end{tikzcd}
+\end{document}
+```
+
+$\mathbf{Grp}$ の中でこの定義を展開すると、よく知られた元による条件が出てくる
+（$\ker\varphi$ の具体形は [[群準同型の核と像]] を参照）。
+
+<Proposition title="正規部分群（元による特徴づけ）" id="prop-normal-elementwise">
+部分群 $N \leq G$ について、次は同値である。
+
+1. $N \trianglelefteq G$
+2. 任意の $g \in G$ について $g N g^{-1} = N$
+</Proposition>
+
+<Proof>
+$1 \Rightarrow 2$: $N = \ker\varphi$ とする。$x \in N$、$g \in G$ を任意に取ると
+
+$$
+\varphi(g x g^{-1}) = \varphi(g) \ast \varphi(x) \ast \varphi(g)^{-1}
+= \varphi(g) \ast e_H \ast \varphi(g)^{-1} = e_H
+$$
+
+なので $g x g^{-1} \in N$、すなわち $g N g^{-1} \subseteq N$。
+$g^{-1}$ についても同じことが言えるので、等号が成り立つ。
+
+$2 \Rightarrow 1$: $g N g^{-1} = N$ を満たす $N$ を核に持つ準同型を作って見せる必要があり、
+[[商群]] への射影がそれを与える。証明は商群のノートで完成させる。
+</Proof>
+
+<Example title="剰余写像の核" id="ex-normal-remainder">
+剰余を取る準同型 $\mathbb{Z} \to \mathbb{Z}/n\mathbb{Z}$ の核は
+$n\mathbb{Z} = \{\, nm \mid m \in \mathbb{Z} \,\}$ なので、$n\mathbb{Z} \trianglelefteq \mathbb{Z}$
+（アーベル群では $g x g^{-1} = x$ なので、そもそもすべての部分群が正規である）。
+</Example>

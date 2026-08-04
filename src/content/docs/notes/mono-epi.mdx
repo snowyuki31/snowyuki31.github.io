@@ -1,0 +1,109 @@
+---
+title: モノ射・エピ射
+description: 合成から消去できるという形で単射・全射を射の言葉に言い換えたもの。
+---
+
+import { Definition, Example, Proof } from '@components/env';
+
+<Definition title="モノ射" id="def-mono">
+[[圏]] $\mathcal{C}$ の射 $m \colon A \to B$ が**モノ射**（monomorphism, mono）であるとは、
+任意の対象 $X$ と射 $f, g \colon X \to A$ について
+
+$$
+m \circ f = m \circ g \implies f = g
+$$
+
+が成り立つこと、すなわち $m$ が**左簡約可能**（left cancellable）であることをいう。
+可換図式では $A \hookrightarrow B$ と書く。
+</Definition>
+
+```tikz
+\usepackage{tikz-cd}
+\usepackage{amssymb}
+\begin{document}
+\begin{tikzcd}[column sep=huge]
+X \arrow[r, shift left=1.2, "f"] \arrow[r, shift right=1.2, "g"'] & A \arrow[r, "m"] & B
+\end{tikzcd}
+\end{document}
+```
+
+「平行な 2 本の射 $f, g$ を $m$ に合成した結果が等しいなら、合成する前から等しい」
+というのがモノ射の条件である。
+
+<Example title="単射は Set のモノ射" id="ex-injective-mono">
+集合の圏 $\mathbf{Set}$ では、写像 $m \colon A \to B$ について
+「$m$ がモノ射」と「$m$ が単射」は同値である。
+</Example>
+
+「$A$ の元を 1 つ取ること」と「一点集合 $\{*\}$ からの写像 $f \colon \{*\} \to A$」が同じとみなせるのがポイント。
+
+```tikz
+\usepackage{tikz-cd}
+\usepackage{amssymb}
+\begin{document}
+\begin{tikzcd}[column sep=huge]
+\{*\} \arrow[r, shift left=1.2, "f\, \colon\, * \mapsto a"] \arrow[r, shift right=1.2, "g \,\colon\, * \mapsto a'"'] & A \arrow[r, "m"] & B
+\end{tikzcd}
+\end{document}
+```
+
+<Proof>
+単射 $\Rightarrow$ モノ射: $m \circ f = m \circ g$ とすると、各 $x \in X$ で
+$m(f(x)) = m(g(x))$ なので、$m$ の単射性から $f(x) = g(x)$、すなわち $f = g$。
+
+モノ射 $\Rightarrow$ 単射: $m(a) = m(a')$ とし、一点集合から
+$a, a'$ をそれぞれ指す写像 $f, g \colon \{*\} \to A$ を取る（上図）。
+$m \circ f = m \circ g$（どちらも $*$ を $m(a) = m(a')$ に送る）なので、
+$m$ がモノ射であることから $f = g$、すなわち $a = a'$。
+</Proof>
+
+<Definition title="エピ射" id="def-epi">
+圏 $\mathcal{C}$ の射 $e \colon A \to B$ が**エピ射**（epimorphism, epi）であるとは、
+任意の対象 $X$ と射 $f, g \colon B \to X$ について
+
+$$
+f \circ e = g \circ e \implies f = g
+$$
+
+が成り立つこと、すなわち $e$ が**右簡約可能**（right cancellable）であることをいう。
+可換図式では $A \twoheadrightarrow B$ と書く。
+</Definition>
+
+```tikz
+\usepackage{tikz-cd}
+\usepackage{amssymb}
+\begin{document}
+\begin{tikzcd}[column sep=huge]
+A \arrow[r, "e"] & B \arrow[r, shift left=1.2, "f"] \arrow[r, shift right=1.2, "g"'] & X
+\end{tikzcd}
+\end{document}
+```
+
+<Example title="全射は Set のエピ射" id="ex-surjective-epi">
+集合の圏 $\mathbf{Set}$ では、写像 $e \colon A \to B$ について
+「$e$ がエピ射」と「$e$ が全射」は同値である。
+</Example>
+
+「$B$ の部分集合を 1 つ取ること」と「写像 $B \to \{0,1\}$」が同じとみなせるのがポイント。
+このように取ることで、$e$ が全射であれば$f=g$となり、$e$が全射でなければ$f \neq g$となるような$f,g$を作れる。
+
+```tikz
+\usepackage{tikz-cd}
+\usepackage{amssymb}
+\begin{document}
+\begin{tikzcd}[column sep=huge]
+A \arrow[r, "e"] & B \arrow[r, shift left=1.2, "f \,\equiv\, 0"] \arrow[r, shift right=1.2, "g \,=\, \chi_{\{b'\}}"'] & \{0{,}1\}
+\end{tikzcd}
+\end{document}
+```
+
+<Proof>
+全射 $\Rightarrow$ エピ射: $f \circ e = g \circ e$ とする。$B$ の各元 $b$ は全射性により
+$b = e(a)$ と書けるので、$f(b) = f(e(a)) = g(e(a)) = g(b)$、すなわち $f = g$。
+
+エピ射 $\Rightarrow$ 全射: 対偶を示す。$e$ が全射でないとし、像に入らない点
+$b' \in B$ を取る。$f \equiv 0$（定数写像）と、$b'$ でだけ $1$ を返す特性関数
+$g = \chi_{\{b'\}}$ を比べると（上図）、$e$ の像の上ではどちらも $0$ なので
+$f \circ e = g \circ e$ だが、$b'$ での値が違うので $f \neq g$。
+よって $e$ はエピ射でない。
+</Proof>

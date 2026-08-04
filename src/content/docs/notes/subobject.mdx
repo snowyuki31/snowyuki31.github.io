@@ -1,0 +1,55 @@
+---
+title: 部分対象
+description: 対象へのモノ射を同型で束ねたもの。「部分集合」「部分群」の圏論的な表現。
+---
+
+import { Definition } from '@components/env';
+
+「$X$ の部分」を圏論で表すには、$X$ の中身を見る代わりに、
+$X$ に入ってくる [[モノ射・エピ射|モノ射]] を使う。
+まず、$X$ へのモノ射どうしを比べる順序を定める。
+
+<Definition title="モノ射の間の順序" id="def-mono-order">
+[[圏]] $\mathcal{C}$ の対象 $X$ へのモノ射 $m \colon A \to X$、$m' \colon A' \to X$ について、
+
+$$
+m \leq m' \iff m = m' \circ u \text{ となる射 } u \colon A \to A' \text{ が存在する}
+$$
+
+と定める（$m$ が $m'$ を**経由する**）。
+</Definition>
+
+```tikz
+\usepackage{tikz-cd}
+\usepackage{amssymb}
+\begin{document}
+\begin{tikzcd}[row sep=huge, column sep=huge]
+A \arrow[rr, hook, "m"] \arrow[rd, dashed, "u"'] & & X \\
+ & A' \arrow[ru, hook, "m'"'] &
+\end{tikzcd}
+\end{document}
+```
+
+この $u$ は存在すればただ 1 つで（$m' \circ u = m' \circ u'$ なら $m'$ の左簡約で $u = u'$）、
+それ自身モノ射になる。
+
+<Definition title="部分対象" id="def-subobject">
+$m \leq m'$ かつ $m' \leq m$ のとき $m \sim m'$ と書くと、これは同値関係になる。
+その同値類を $X$ の**部分対象**（subobject）と呼び、部分対象の全体は
+$\leq$ により [[半順序集合]] をなす。
+</Definition>
+
+下に、対象$X$の部分対象が成す半順序の例を示す。
+この例では、$m_B \leq m_A\sim m_{A'} $である。
+
+```tikz
+\usepackage{tikz-cd}
+\usepackage{amssymb}
+\begin{document}
+\begin{tikzcd}[column sep=huge, row sep=huge]
+ & X & \\
+B \arrow[ru, hook, "m_B"] \arrow[r, "u_1"'] & A \arrow[u, hook, "m_A"'] \arrow[r, shift left=1.8, "u_2"] \arrow[r, phantom, "\cong"] & A' \arrow[lu, hook', "m_{A'}"'] \arrow[l, shift left=1.8, "u_2^{-1}"]
+\end{tikzcd}
+\end{document}
+```
+
